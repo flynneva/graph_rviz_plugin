@@ -6,6 +6,7 @@ namespace rviz_graph_plugin
 
 AxesWindow::AxesWindow(QDialog *parent)
 {
+  setWindowTitle("Axes Configuration");
 
 }
 

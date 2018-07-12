@@ -6,6 +6,7 @@ namespace rviz_graph_plugin
 
 ConfigWindow::ConfigWindow(QDialog *parent)
 {
+  setWindowTitle("Configure Topics plot");
 
 }
 

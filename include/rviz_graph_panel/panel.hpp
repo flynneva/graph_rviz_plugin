@@ -43,7 +43,11 @@ protected Q_SLOTS:
                                 const QMessageBox::Icon icon = QMessageBox::Information);
   virtual void load(const rviz::Config &config);
   virtual void save(rviz::Config config) const;
+  void startStopClicked();
   void topicsSelectionClicked();
+  void configClicked();
+  void axesClicked();
+  void clearClicked();
 
 private:
   ros::NodeHandle nh_;
