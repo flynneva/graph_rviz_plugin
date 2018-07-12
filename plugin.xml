@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<library path="lib/librviz_graph_panel">
+  <class name="rviz_graph_plugin/GraphPanel"
+         type="rviz_graph_plugin::GraphPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      A graph panel
+    </description>
+  </class>
+</library>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="rviz" pkg="rviz" type="rviz" args="-s '' -d $(find rviz_graph_plugin)/config/gui.rviz" output="screen" required="true"/>
+</launch>
