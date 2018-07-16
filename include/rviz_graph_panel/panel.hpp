@@ -10,6 +10,7 @@
 #include <QFuture>
 #include <QLabel>
 #include <QMessageBox>
+#include <QPen>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
@@ -52,6 +53,7 @@ protected Q_SLOTS:
 private:
   ros::NodeHandle nh_;
   QPushButton *start_stop_button_;
+  std::map<std::string, std::string> displayed_topics_;
 };
 
 }

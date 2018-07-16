@@ -23,6 +23,10 @@ set(
 
 set(
   PROJECT_TARGETS
+  ${PROJECT_NAME}_configure_axes
+  ${PROJECT_NAME}_configure_topics
+  ${PROJECT_NAME}_qcustomplot
+  ${PROJECT_NAME}_selection_topics
   ${PROJECT_QT_PANELS_TARGETS}
 )
 
@@ -61,11 +65,11 @@ include_directories(
 ## QCustomPlot
 qt5_wrap_cpp(
   qcustomplot_MOCS
-  include/${PROJECT_NAME}/qcustomplot.hpp
+  include/${PROJECT_NAME}/qcustomplot.h
 )
 add_library(
   ${PROJECT_NAME}_qcustomplot
-  ${calibrationwindow_MOCS}
+  ${qcustomplot_MOCS}
   src/qcustomplot.cpp
 )
 target_link_libraries(
@@ -73,10 +77,6 @@ target_link_libraries(
   Qt5::Widgets
   Qt5::Gui
   Qt5::PrintSupport
-)
-add_dependencies(
-  ${PROJECT_NAME}_qcustomplot
-  ${catkin_EXPORTED_TARGETS}
 )
 
 ## SelectionTopics
@@ -86,7 +86,7 @@ qt5_wrap_cpp(
 )
 add_library(
   ${PROJECT_NAME}_selection_topics
-  ${calibrationwindow_MOCS}
+  ${selection_topics_MOCS}
   src/selection_topics.cpp
 )
 target_link_libraries(
@@ -94,11 +94,6 @@ target_link_libraries(
   Qt5::Widgets
   Qt5::Gui
 )
-add_dependencies(
-  ${PROJECT_NAME}_selection_topics
-  ${catkin_EXPORTED_TARGETS}
-)
-
 
 ## ConfigureTopics
 qt5_wrap_cpp(
@@ -107,7 +102,7 @@ qt5_wrap_cpp(
 )
 add_library(
   ${PROJECT_NAME}_configure_topics
-  ${calibrationwindow_MOCS}
+  ${configure_topics_MOCS}
   src/configure_topics.cpp
 )
 target_link_libraries(
@@ -115,11 +110,6 @@ target_link_libraries(
   Qt5::Widgets
   Qt5::Gui
 )
-add_dependencies(
-  ${PROJECT_NAME}_configure_topics
-  ${catkin_EXPORTED_TARGETS}
-)
-
 
 ## ConfigureAxes
 qt5_wrap_cpp(
@@ -128,7 +118,7 @@ qt5_wrap_cpp(
 )
 add_library(
   ${PROJECT_NAME}_configure_axes
-  ${calibrationwindow_MOCS}
+  ${configure_axes_MOCS}
   src/configure_axes.cpp
 )
 target_link_libraries(
@@ -136,11 +126,6 @@ target_link_libraries(
   Qt5::Widgets
   Qt5::Gui
 )
-add_dependencies(
-  ${PROJECT_NAME}_configure_axes
-  ${catkin_EXPORTED_TARGETS}
-)
-
 
 ## Qt panel
 qt5_wrap_cpp(
@@ -156,19 +141,18 @@ target_link_libraries(
   ${PROJECT_NAME}
   Qt5::Widgets
   Qt5::Gui
+  ${PROJECT_NAME}_configure_axes
+  ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
-  ${PROJECT_NAME}_configure_topics
-  ${PROJECT_NAME}_configure_axes
   ${catkin_LIBRARIES}
-
 )
 add_dependencies(
   ${PROJECT_NAME}
+  ${PROJECT_NAME}_configure_axes
+  ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
-  ${PROJECT_NAME}_configure_topics
-  ${PROJECT_NAME}_configure_axes
   ${catkin_EXPORTED_TARGETS}
 )
 

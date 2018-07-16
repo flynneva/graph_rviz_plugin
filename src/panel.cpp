@@ -3,10 +3,9 @@
 namespace rviz_graph_plugin
 {
 
-
 GraphPanel::GraphPanel(QWidget* parent) :
         rviz::Panel(parent),
-        start_stop_button_ (new QPushButton)
+        start_stop_button_(new QPushButton)
 {
   qRegisterMetaType<QMessageBox::Icon>();
   setName("Graph");
@@ -25,10 +24,10 @@ GraphPanel::GraphPanel(QWidget* parent) :
   button_layout->addWidget(axes_button);
   button_layout->addWidget(clear_button);
   layout->addLayout(button_layout);
-  connect(start_stop_button_,SIGNAL(clicked()),SLOT(startStopClicked()));
-  connect(topic_button,SIGNAL(clicked()),SLOT(topicsSelectionClicked()));
-  connect(config_button,SIGNAL(clicked()),SLOT(configClicked()));
-  connect(axes_button,SIGNAL(clicked()),SLOT(axesClicked()));
+  connect(start_stop_button_, SIGNAL(clicked()), SLOT(startStopClicked()));
+  connect(topic_button, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
+  connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
+  connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
 
 }
 
@@ -37,9 +36,9 @@ GraphPanel::~GraphPanel()
 }
 
 void GraphPanel::displayMessageBoxHandler(const QString title,
-                                     const QString message,
-                                     const QString info_msg,
-                                     const QMessageBox::Icon icon)
+                                          const QString message,
+                                          const QString info_msg,
+                                          const QMessageBox::Icon icon)
 {
   const bool old(isEnabled());
   Q_EMIT setEnabled(false);
@@ -59,7 +58,7 @@ void GraphPanel::load(const rviz::Config& config)
 }
 
 void GraphPanel::save(rviz::Config config) const
-{
+                      {
   rviz::Panel::save(config);
 }
 
@@ -70,14 +69,18 @@ void GraphPanel::startStopClicked()
 
 void GraphPanel::topicsSelectionClicked()
 {
-  TopicWindow *topic_window = new TopicWindow();
-  topic_window->exec();
 
+  SelectionTopics *topic_window = new SelectionTopics();
+ if (!(topic_window->exec()))
+    return;
+
+ displayed_topics_ = topic_window->displayed_topics_;
 }
 
 void GraphPanel::configClicked()
 {
   ConfigWindow *configure_topics = new ConfigWindow;
+  configure_topics->displayed_topics_ = displayed_topics_;
   configure_topics->exec();
 }
 
