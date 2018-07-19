@@ -29,6 +29,7 @@ GraphPanel::GraphPanel(QWidget* parent) :
   connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
 
+
 }
 
 GraphPanel::~GraphPanel()
@@ -70,11 +71,12 @@ void GraphPanel::startStopClicked()
 void GraphPanel::topicsSelectionClicked()
 {
 
-  SelectionTopics *topic_window = new SelectionTopics();
+  SelectionTopics *topic_window = new SelectionTopics(nh_);
  if (!(topic_window->exec()))
     return;
-
+/*
  displayed_topics_ = topic_window->displayed_topics_;
+ connect(topic_window,SIGNAL(topic_window->vectorUpdated(std::string)),this, SLOT(updateGraph(std::string)));*/ ///FIXME
 }
 
 void GraphPanel::configClicked()
@@ -88,6 +90,11 @@ void GraphPanel::axesClicked()
 {
   AxesWindow *configure_axes = new AxesWindow;
   configure_axes->exec();
+}
+
+void GraphPanel::updateGraph(std::string topic_name)
+{
+
 }
 
 }

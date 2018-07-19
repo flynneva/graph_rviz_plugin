@@ -79,6 +79,22 @@ target_link_libraries(
   Qt5::PrintSupport
 )
 
+## TopicsData
+qt5_wrap_cpp(
+  topics_data_MOCS
+  include/${PROJECT_NAME}/topic.hpp
+)
+add_library(
+  ${PROJECT_NAME}_topics_data
+  ${topics_data_MOCS}
+  src/topic.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}_topics_data
+  Qt5::Widgets
+  Qt5::Gui
+)
+
 ## SelectionTopics
 qt5_wrap_cpp(
   selection_topics_MOCS
@@ -91,8 +107,13 @@ add_library(
 )
 target_link_libraries(
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_topics_data
   Qt5::Widgets
   Qt5::Gui
+ )
+add_dependencies(
+  ${PROJECT_NAME}_topics_data
+  ${catkin_EXPORTED_TARGETS}
 )
 
 ## ConfigureTopics
@@ -107,8 +128,13 @@ add_library(
 )
 target_link_libraries(
   ${PROJECT_NAME}_configure_topics
+  ${PROJECT_NAME}_topics_data
   Qt5::Widgets
   Qt5::Gui
+)
+add_dependencies(
+  ${PROJECT_NAME}_topics_data
+  ${catkin_EXPORTED_TARGETS}
 )
 
 ## ConfigureAxes
@@ -125,6 +151,10 @@ target_link_libraries(
   ${PROJECT_NAME}_configure_axes
   Qt5::Widgets
   Qt5::Gui
+)
+add_dependencies(
+  ${PROJECT_NAME}_topics_data
+  ${catkin_EXPORTED_TARGETS}
 )
 
 ## Qt panel
@@ -145,6 +175,7 @@ target_link_libraries(
   ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_topics_data
   ${catkin_LIBRARIES}
 )
 add_dependencies(
@@ -153,6 +184,7 @@ add_dependencies(
   ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_topics_data
   ${catkin_EXPORTED_TARGETS}
 )
 
