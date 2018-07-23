@@ -33,6 +33,7 @@ GraphPanel::GraphPanel(QWidget* parent) :
   connect(topic_button, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
   connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
+
 }
 
 GraphPanel::~GraphPanel()

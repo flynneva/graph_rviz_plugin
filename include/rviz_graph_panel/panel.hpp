@@ -57,6 +57,7 @@ protected Q_SLOTS:
   void clearClicked();
 
 private:
+  ros::NodeHandle nh_;
   QPushButton *start_stop_button_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;

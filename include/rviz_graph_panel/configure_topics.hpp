@@ -1,8 +1,7 @@
 #ifndef CONFIG_WINDOW_HPP
 #define CONFIG_WINDOW_HPP
 
-#include "../include/rviz_graph_panel/topic.hpp"
-
+#include <rviz_graph_panel/topic.hpp>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QColor>
@@ -29,16 +28,8 @@ public:
 
 protected Q_SLOTS:
   void okClicked();
-
-private :
-
-
 };
 
 }
-
-
-
-
 
 #endif

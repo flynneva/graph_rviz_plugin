@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 #include <deque>
 #include <rviz_graph_panel/qcustomplot.h>
-#include "../include/rviz_graph_panel/topic.hpp"
+#include <rviz_graph_panel/topic.hpp>
 
 namespace rviz_graph_plugin
 {
