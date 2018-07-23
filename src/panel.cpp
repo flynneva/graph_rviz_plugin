@@ -19,7 +19,7 @@ GraphPanel::GraphPanel(QWidget* parent) :
   QPushButton *config_button = new QPushButton("Config");
   QPushButton *axes_button = new QPushButton("Axes");
   QPushButton *clear_button = new QPushButton("Clear");
-  start_stop_button_->setText("Start");
+  start_stop_button_->setText("Stop");
   button_layout->addWidget(start_stop_button_);
   button_layout->addWidget(topic_button);
   button_layout->addWidget(config_button);
@@ -73,7 +73,7 @@ void GraphPanel::save(rviz::Config config) const
 
 void GraphPanel::startStopClicked()
 {
-  start_stop_button_->setText("Stop");
+  start_stop_button_->setText("Start");
 }
 
 void GraphPanel::topicsSelectionClicked()
