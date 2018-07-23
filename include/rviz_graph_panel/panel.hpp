@@ -5,6 +5,7 @@
 #include <ros/ros.h>
 #include <ros/service.h>
 #include <rviz/panel.h>
+#include <ros/time.h>
 #endif
 
 #include <QFuture>
@@ -14,11 +15,14 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <deque>
+#include <memory>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/configure_axes.hpp>
 #include <rviz_graph_panel/configure_topics.hpp>
 #include <rviz_graph_panel/selection_topics.hpp>
+#include <rviz_graph_panel/topic.hpp>
 
 namespace rviz_graph_plugin
 {
@@ -30,6 +34,8 @@ Q_OBJECT
 public:
   GraphPanel(QWidget* parent = 0);
   virtual ~GraphPanel();
+  std::shared_ptr<ros::NodeHandle> nh_;
+  void GraphUpdate();
 
 Q_SIGNALS:
   void displayMessageBox(const QString,
@@ -51,9 +57,10 @@ protected Q_SLOTS:
   void clearClicked();
 
 private:
-  ros::NodeHandle nh_;
   QPushButton *start_stop_button_;
-  std::map<std::string, std::string> displayed_topics_;
+  QCustomPlot *plot_;
+  std::deque<std::shared_ptr<TopicData>> displayed_topics_;
+
 };
 
 }

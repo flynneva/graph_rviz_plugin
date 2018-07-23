@@ -3,6 +3,7 @@
 
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
+#include <ros/time.h>
 #include <ros/service.h>
 #include <rviz/panel.h>
 #endif
@@ -13,10 +14,15 @@
 #include <QFuture>
 #include <QLabel>
 #include <QMessageBox>
+#include <QPen>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <deque>
+#include <rviz_graph_panel/qcustomplot.h>
+#include "../include/rviz_graph_panel/topic.hpp"
+
 namespace rviz_graph_plugin
 {
 
@@ -25,10 +31,12 @@ class SelectionTopics : public QDialog
 Q_OBJECT
 
 public:
-  SelectionTopics(QDialog *parent = 0);
+  SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
+                  QDialog *parent = 0);
   ~SelectionTopics();
   void detectTopics();
-  std::map<std::string, std::string> displayed_topics_;
+  std::deque<std::shared_ptr<TopicData>> displayed_topics_;
+  std::shared_ptr<ros::NodeHandle> nh_;
 
 Q_SIGNALS:
   void displayMessageBox(const QString,

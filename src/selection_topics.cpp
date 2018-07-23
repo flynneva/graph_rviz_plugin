@@ -3,8 +3,9 @@
 namespace rviz_graph_plugin
 {
 
-SelectionTopics::SelectionTopics(QDialog *)
-
+SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
+                                 QDialog *) :
+        nh_(nh)
 {
   setWindowTitle("Topics Selection");
   QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
@@ -56,8 +57,7 @@ void SelectionTopics::detectTopics()
         topic.datatype == "std_msgs/Int64" ||
         topic.datatype == "std_msgs/UInt64" ||
         topic.datatype == "std_msgs/Float32" ||
-        topic.datatype == "std_msgs/Float64" ||
-        topic.datatype == "std_msgs/String")
+        topic.datatype == "std_msgs/Float64")
       supported_topics_.push_back(topic);
   }
 
@@ -117,8 +117,9 @@ void SelectionTopics::okClicked()
     if (!button->isChecked())
       continue;
 
-    displayed_topics_.insert(std::pair<std::string, std::string>(button->objectName().toStdString(),
-                                                                 button->toolTip().toStdString()));
+    std::shared_ptr<TopicData> topic_data =
+            std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
+        displayed_topics_.push_back(topic_data);
   }
   accept();
 }
