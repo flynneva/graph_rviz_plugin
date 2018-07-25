@@ -20,6 +20,7 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 #include <deque>
+#include <mutex>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/topic.hpp>
 
@@ -32,6 +33,7 @@ Q_OBJECT
 
 public:
   SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
+                  std::deque<std::shared_ptr<TopicData>> displayed_topics,
                   QDialog *parent = 0);
   ~SelectionTopics();
   void detectTopics();

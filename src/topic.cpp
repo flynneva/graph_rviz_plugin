@@ -47,6 +47,7 @@ TopicData::TopicData(std::string topic_name,
     ROS_ERROR_STREAM("Could not find callback for topic type " << topic_type_);
     return;
   }
+  
 }
 
 TopicData::~TopicData()
@@ -56,6 +57,8 @@ TopicData::~TopicData()
 
 void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
+    {
   if (msg->data == true)
   {
     topic_data_.push_back(1);
@@ -72,11 +75,13 @@ void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
     data_update_ = true;
     return;
   }
+    }
 
 }
 
 void TopicData::durationCallback(const std_msgs::DurationConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (msg->data).toSec();
   topic_data_.push_back(tmp);
@@ -88,6 +93,7 @@ void TopicData::durationCallback(const std_msgs::DurationConstPtr &msg)
 
 void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -99,6 +105,7 @@ void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
 
 void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -110,6 +117,7 @@ void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 
 void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -121,6 +129,7 @@ void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
 
 void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
 {
+  std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -132,6 +141,7 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
 
 void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -143,6 +153,7 @@ void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
 
 void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -159,6 +170,7 @@ void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
    QDateTime time;
    time.setMSecsSinceEpoch(msg->data.sec * 1e3 + msg->data.nsec / 1e6);
    */
+  std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (msg->data).toSec();
   topic_data_.push_back(tmp);
@@ -170,17 +182,19 @@ void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
 
 void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
   double time = (ros::Time::now()).toSec() - begin_.toSec();
   topic_time_.push_back(time);
-  Q_EMIT vectorUpdated(topic_name_);
+  data_update_ = true;
   return;
 }
 
 void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -192,6 +206,7 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 
 void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -203,6 +218,7 @@ void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
 
 void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
 {
+    std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (double)(msg->data);
   topic_data_.push_back(tmp);
@@ -211,5 +227,19 @@ void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
   data_update_ = true;
   return;
 }
+
+
+QVector<double> TopicData::getTopicData()
+{
+    std::lock_guard<std::mutex> guard(data_mutex_);
+    return topic_data_;
+}
+
+QVector<double> TopicData::getTopicTime()
+{
+    std::lock_guard<std::mutex> guard(data_mutex_);
+    return topic_time_;
+}
+
 
 }

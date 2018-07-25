@@ -1,11 +1,14 @@
-#include "../include/rviz_graph_panel/selection_topics.hpp"
+#include <rviz_graph_panel/selection_topics.hpp>
 
 namespace rviz_graph_plugin
 {
 
 SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
+                                 std::deque<std::shared_ptr<TopicData>> displayed_topics,
                                  QDialog *) :
+        displayed_topics_(displayed_topics),
         nh_(nh)
+        
 {
   setWindowTitle("Topics Selection");
   QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
@@ -19,6 +22,11 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
     radio_button->setText(QString::fromStdString(topic.name));
     radio_button->setObjectName(QString::fromStdString(topic.name));
     radio_button->setToolTip(QString::fromStdString(topic.datatype));
+    for (unsigned i = 0; i < displayed_topics_.size(); i++)
+    {
+        if((*displayed_topics_[i]).topic_name_ == topic.name)
+            radio_button->setChecked(true);
+    }
     pick_topics_dialog->addWidget(radio_button);
   }
 
@@ -112,16 +120,19 @@ void SelectionTopics::displayMessageBoxHandler(const QString title,
 
 void SelectionTopics::okClicked()
 {
-  for (auto button : topic_buttons_)
+    for (unsigned i = 0; i < displayed_topics_.size(); i++){
+  for (auto button : topic_buttons_ )
   {
-    if (!button->isChecked())
+    if (!button->isChecked() && (*displayed_topics_[i]).topic_name_ == button->objectName().toStdString())
       continue;
 
+    
     std::shared_ptr<TopicData> topic_data =
             std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
         displayed_topics_.push_back(topic_data);
   }
   accept();
+}
 }
 
 }

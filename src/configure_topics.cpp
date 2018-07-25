@@ -30,18 +30,33 @@ void ConfigWindow::WindowConstruction()
     topic_combobox_.push_back(color_selection_combobox);
     color_selection_combobox->setObjectName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
     color_selection_combobox->addItems(color_list);
+        if ((*displayed_topics_[i]).color_ == QColor(0, 0, 255)) //blue
+          color_selection_combobox->setCurrentIndex(0);
+        if ((*displayed_topics_[i]).color_ == QColor(255, 0, 0)) //red
+          color_selection_combobox->setCurrentIndex(1);
+        if ((*displayed_topics_[i]).color_ == QColor(0, 0, 0)) //black
+          color_selection_combobox->setCurrentIndex(2);
+        if ((*displayed_topics_[i]).color_ == QColor(0, 255, 255)) //cyan
+          color_selection_combobox->setCurrentIndex(3);
+        if ((*displayed_topics_[i]).color_ == QColor(255, 255, 0)) //yellow
+          color_selection_combobox->setCurrentIndex(4);
+        if ((*displayed_topics_[i]).color_ == QColor(192, 192, 192)) //gray
+          color_selection_combobox->setCurrentIndex(5);
     topic_form->addRow("Color", color_selection_combobox);
 
     QSpinBox *thickness_spin_box = new QSpinBox;
     topic_spinbox_.push_back(thickness_spin_box);
     thickness_spin_box->setObjectName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
     thickness_spin_box->setRange(1, 10);
+    thickness_spin_box->setValue((*displayed_topics_[i]).thickness_);
     topic_form->addRow("Thickness", thickness_spin_box);
 
     QCheckBox *topic_checkbox = new QCheckBox;
     topic_buttons_.push_back(topic_checkbox);
     topic_checkbox->setObjectName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
     topic_checkbox->setChecked(true);
+    if((*displayed_topics_[i]).displayed_ == false )
+        topic_checkbox->setChecked(false);
     topic_form->addRow("Display", topic_checkbox);
     form_layout->addLayout(topic_form);
 

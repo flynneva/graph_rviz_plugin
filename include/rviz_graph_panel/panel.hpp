@@ -15,8 +15,13 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <QTimer>
 #include <deque>
 #include <memory>
+#include <thread>
+#include <chrono>
+#include  <mutex>
+#include <thread>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/configure_axes.hpp>
@@ -34,8 +39,8 @@ Q_OBJECT
 public:
   GraphPanel(QWidget* parent = 0);
   virtual ~GraphPanel();
+  bool interruption_ = false ;
   std::shared_ptr<ros::NodeHandle> nh_;
-  void GraphUpdate();
 
 Q_SIGNALS:
   void displayMessageBox(const QString,
@@ -55,12 +60,15 @@ protected Q_SLOTS:
   void configClicked();
   void axesClicked();
   void clearClicked();
+  void graphUpdate();
 
 private:
-  ros::NodeHandle nh_;
   QPushButton *start_stop_button_;
+  QTimer *graph_refresh_timer_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
+  bool graph_running_ = true ;
+  
 
 };
 
