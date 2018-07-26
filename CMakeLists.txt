@@ -111,7 +111,7 @@ target_link_libraries(
   ${PROJECT_NAME}_topics_data
   Qt5::Widgets
   Qt5::Gui
- )
+)
 add_dependencies(
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
@@ -172,13 +172,13 @@ add_library(
 )
 target_link_libraries(
   ${PROJECT_NAME}
-  Qt5::Widgets
-  Qt5::Gui
   ${PROJECT_NAME}_configure_axes
   ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
+  Qt5::Widgets
+  Qt5::Gui
   ${catkin_LIBRARIES}
 )
 add_dependencies(
