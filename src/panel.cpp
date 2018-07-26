@@ -139,6 +139,7 @@ void GraphPanel::topicsSelectionClicked()
   if (!(topic_window->exec()))
     return;
 
+  plot_->legend->clearItems();
   displayed_topics_ = topic_window->displayed_topics_;
 }
 

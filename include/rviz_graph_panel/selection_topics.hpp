@@ -33,11 +33,12 @@ Q_OBJECT
 
 public:
   SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
-                  std::deque<std::shared_ptr<TopicData>> displayed_topics,
+                  std::deque<std::shared_ptr<TopicData>> already_displayed_topics,
                   QDialog *parent = 0);
   ~SelectionTopics();
   void detectTopics();
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
+  std::deque<std::shared_ptr<TopicData>> already_displayed_topics_;
   std::shared_ptr<ros::NodeHandle> nh_;
 
 Q_SIGNALS:
