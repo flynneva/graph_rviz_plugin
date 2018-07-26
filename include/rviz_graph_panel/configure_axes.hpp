@@ -1,7 +1,8 @@
-#ifndef AXES_WINDOW_HPP
-#define AXES_WINDOW_HPP
+#ifndef RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
+#define RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
 
 #include <QDialog>
+
 namespace rviz_graph_plugin
 {
 
@@ -12,11 +13,6 @@ public:
   ~AxesWindow();
 };
 
-
 }
-
-
-
-
 
 #endif

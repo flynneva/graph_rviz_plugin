@@ -3,8 +3,9 @@
   <name>rviz_graph_panel</name>
   <version>0.0.1</version>
   <description>RViz graph plugin</description>
-  <author>Edouard Pronier - Institut Maupertuis</author>
-  <maintainer email="pronier.edouard@gmail.com">Edouard Pronier</maintainer>
+
+  <author>Édouard Pronier, Victor Lamoine - Institut Maupertuis</author>
+  <maintainer email="victor.lamoine@gmail.com">Victor Lamoine</maintainer>
   <license>BSD-3-Clause-Attribution</license>
 
   <buildtool_depend>catkin</buildtool_depend>

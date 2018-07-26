@@ -1,4 +1,4 @@
-#include "../include/rviz_graph_panel/topic.hpp"
+#include <rviz_graph_panel/topic.hpp>
 //FIXME The time's gestion
 
 namespace rviz_graph_plugin
@@ -47,7 +47,7 @@ TopicData::TopicData(std::string topic_name,
     ROS_ERROR_STREAM("Could not find callback for topic type " << topic_type_);
     return;
   }
-  
+
 }
 
 TopicData::~TopicData()

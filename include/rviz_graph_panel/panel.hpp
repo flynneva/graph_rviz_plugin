@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PLUGIN_HPP
-#define RVIZ_GRAPH_PLUGIN_HPP
+#ifndef RVIZ_GRAPH_PANEL_PANEL_HPP
+#define RVIZ_GRAPH_PANEL_PANEL_HPP
 
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
@@ -20,7 +20,7 @@
 #include <memory>
 #include <thread>
 #include <chrono>
-#include  <mutex>
+#include <mutex>
 #include <thread>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
@@ -68,7 +68,7 @@ private:
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   bool graph_running_ = true ;
-  
+
 
 };
 
