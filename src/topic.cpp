@@ -135,6 +135,8 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
   topic_data_.push_back(tmp);
   double time = (ros::Time::now()).toSec() - begin_.toSec();
   topic_time_.push_back(time);
+  ROS_ERROR_STREAM("Refresh Data " << tmp);
+  ROS_ERROR_STREAM("Refresh time " << time);
   data_update_ = true;
   return;
 }

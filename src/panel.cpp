@@ -3,18 +3,18 @@
 namespace rviz_graph_plugin
 {
 
-GraphPanel::GraphPanel(QWidget* parent) :
-        rviz::Panel(parent),
-        nh_(std::make_shared<ros::NodeHandle>()),
-        start_stop_button_(new QPushButton),
-        graph_refresh_timer_(new QTimer(this)),
-        plot_(new QCustomPlot)
+GraphPanel::GraphPanel(QWidget *parent) :
+  rviz::Panel(parent),
+  nh_(std::make_shared<ros::NodeHandle>()),
+  start_stop_button_(new QPushButton),
+  graph_refresh_timer_(new QTimer(this)),
+  plot_(new QCustomPlot)
 {
   nh_.reset(new ros::NodeHandle);
   qRegisterMetaType<QMessageBox::Icon>();
   setName("Graph");
   setObjectName(getName());
-  QVBoxLayout* layout = new QVBoxLayout();
+  QVBoxLayout *layout = new QVBoxLayout();
   setLayout(layout);
   QHBoxLayout *button_layout = new QHBoxLayout();
   QPushButton *topic_button = new QPushButton("Topics");
@@ -30,21 +30,21 @@ GraphPanel::GraphPanel(QWidget* parent) :
 
   layout->addLayout(button_layout);
   layout->addWidget(plot_);
-  
+
   graph_refresh_timer_->start(16);
 
   connect(start_stop_button_, SIGNAL(clicked()), SLOT(startStopClicked()));
   connect(topic_button, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
   connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
-  connect(graph_refresh_timer_,SIGNAL(timeout()), this, SLOT(graphUpdate()));
+  connect(clear_button,SIGNAL(clicked()),SLOT(clearClicked()));
+  connect(graph_refresh_timer_, SIGNAL(timeout()), this, SLOT(graphUpdate()));
 }
 
 GraphPanel::~GraphPanel()
 {
-    nh_->shutdown();
-    // TODO Wait for graphUpdate thread to exit
-    //update_graph_thread_.join();
+  nh_->shutdown();
+  graph_refresh_timer_->stop();
 }
 
 void GraphPanel::graphUpdate()
@@ -54,38 +54,54 @@ void GraphPanel::graphUpdate()
   QFont legendFont = font();
   legendFont.setPointSize(9);
   plot_->legend->setFont(legendFont);
-  plot_->legend->setBrush(QBrush(QColor(255,255,255,230)));
-  ROS_WARN_STREAM( "nh_" << nh_->ok() );
-      if (graph_running_ == false)
-          return;
-      
-    for (unsigned i = 0; i < displayed_topics_.size(); i++)
+  plot_->legend->setBrush(QBrush(QColor(255, 255, 255, 230)));
+  //ROS_WARN_STREAM("nh_" << nh_->ok());
+  ROS_INFO_STREAM("Number of Topic " << displayed_topics_.size()); //FIXME
+
+  if (graph_running_ == false)
+    return;
+
+  for (unsigned i = 0; i < displayed_topics_.size(); i++)
+  {
+    if ((*displayed_topics_[i]).data_update_ == true && (*displayed_topics_[i]).graph_enable_ == false)
     {
-      if (((*displayed_topics_[i]).displayed_) == true && (*displayed_topics_[i]).data_update_ == true && (*displayed_topics_[i]).graph_enable_ == false)
-      {
-        QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
-        QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
-        plot_->addGraph();
-        plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
-        plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
-        plot_->graph(i)->setData(topic_data, topic_time);
-        (*displayed_topics_[i]).data_update_ = false;
-        (*displayed_topics_[i]).graph_enable_ = true;
-      }
-      if (((*displayed_topics_[i]).displayed_) == true && (*displayed_topics_[i]).data_update_ == true)
-      {
-        QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
-        QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
-          plot_->graph(i)->setData(topic_data, topic_time);
-          plot_->replot();
-      }
+      QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
+      QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
+      plot_->addGraph();
+      //plot_->graph(i)->removeFromLegend();
+      plot_->graph(i)->setName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
+      plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
+      plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
+      plot_->graph(i)->setData(topic_time, topic_data);
+      plot_->graph(i)->setVisible((*displayed_topics_[i]).displayed_);
+      (*displayed_topics_[i]).data_update_ = false;
+      (*displayed_topics_[i]).graph_enable_ = true;
+      plot_->graph(i)->addToLegend();
+
     }
+
+    if ((*displayed_topics_[i]).data_update_ == true)
+    {
+      QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
+      QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
+      plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
+      plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
+      plot_->xAxis->rescale(true);
+      plot_->yAxis->rescale(true);
+//       plot_->xAxis->setRange(*std::min_element(topic_time.constBegin(), topic_time.constEnd()), *std::max_element(topic_time.constBegin(), topic_time.constEnd()));
+//       plot_->yAxis->setRange((*std::min_element(topic_data.constBegin(), topic_data.constEnd())-1), (*std::max_element(topic_data.constBegin(), topic_data.constEnd())+1)); //FIXME
+      plot_->graph(i)->setVisible((*displayed_topics_[i]).displayed_);
+      plot_->graph(i)->setData(topic_time, topic_data);
+      (*displayed_topics_[i]).data_update_ = false;
+      plot_->replot();
+    }
+  }
 }
 
 void GraphPanel::displayMessageBoxHandler(const QString title,
-                                          const QString message,
-                                          const QString info_msg,
-                                          const QMessageBox::Icon icon)
+    const QString message,
+    const QString info_msg,
+    const QMessageBox::Icon icon)
 {
   const bool old(isEnabled());
   Q_EMIT setEnabled(false);
@@ -99,7 +115,7 @@ void GraphPanel::displayMessageBoxHandler(const QString title,
   Q_EMIT setEnabled(old);
 }
 
-void GraphPanel::load(const rviz::Config& config)
+void GraphPanel::load(const rviz::Config &config)
 {
   rviz::Panel::load(config);
 }
@@ -111,36 +127,37 @@ void GraphPanel::save(rviz::Config config) const
 
 void GraphPanel::startStopClicked()
 {
-    if (graph_running_ == false)
-    {
-        graph_refresh_timer_->start(16);
-        start_stop_button_->setText("Stop");
-        graph_running_ = true ;
-        return;
-    }
-          
-    if (graph_running_ == true)
-    {
-        graph_refresh_timer_->stop();
-        start_stop_button_->setText("Start");
-        graph_running_ = false;
-        return;
-    }
-    
-          
-  
-  
+  if (graph_running_ == false)
+  {
+    graph_refresh_timer_->start(16);
+    start_stop_button_->setText("Stop");
+    graph_running_ = true ;
+    plot_->setInteraction(QCP::iRangeZoom, false);
+    plot_->setInteraction(QCP::iRangeDrag, false);
+    return;
+  }
+
+  if (graph_running_ == true)
+  {
+    graph_refresh_timer_->stop();
+    start_stop_button_->setText("Start");
+    graph_running_ = false;
+    plot_->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+    return;
+  }
+
 }
 
 void GraphPanel::topicsSelectionClicked()
 {
 
-  SelectionTopics *topic_window = new SelectionTopics(nh_,displayed_topics_);
+  SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_);
+
   if (!(topic_window->exec()))
     return;
-
-  plot_->legend->clearItems();
+  ROS_WARN_STREAM("Topic size " << displayed_topics_.size()); //FIXME
   displayed_topics_ = topic_window->displayed_topics_;
+  ROS_WARN_STREAM("Nombre de personnes utilisant le shared ptr " << displayed_topics_[0].use_count()); //FIXME 
 }
 
 void GraphPanel::configClicked()
@@ -149,6 +166,7 @@ void GraphPanel::configClicked()
   ConfigWindow *configure_topics = new ConfigWindow;
   configure_topics->displayed_topics_ = displayed_topics_;
   configure_topics->WindowConstruction();
+
   if (!(configure_topics->exec()))
     return;
 
@@ -159,6 +177,7 @@ void GraphPanel::configClicked()
       if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
           && button->isChecked())
         (*displayed_topics_[i]).displayed_ = true;
+
       if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
           && !button->isChecked())
         (*displayed_topics_[i]).displayed_ = false;
@@ -181,21 +200,28 @@ void GraphPanel::configClicked()
       if (((*displayed_topics_[i]).topic_name_) == combobox->objectName().toStdString())
       {
         int index = combobox->currentIndex();
+
         if (index == 0) //blue
           (*displayed_topics_[i]).color_ = QColor(0, 0, 255);
+
         if (index == 1) //red
           (*displayed_topics_[i]).color_ = QColor(255, 0, 0);
+
         if (index == 2) //black
           (*displayed_topics_[i]).color_ = QColor(0, 0, 0);
+
         if (index == 3) //cyan
           (*displayed_topics_[i]).color_ = QColor(0, 255, 255);
+
         if (index == 4) //yellow
           (*displayed_topics_[i]).color_ = QColor(255, 255, 0);
+
         if (index == 5) //gray
           (*displayed_topics_[i]).color_ = QColor(192, 192, 192);
       }
     }
   }
+
   return;
 }
 
@@ -204,6 +230,15 @@ void GraphPanel::axesClicked()
   AxesWindow *configure_axes = new AxesWindow;
   configure_axes->exec();
 }
+
+void GraphPanel::clearClicked()
+{
+  graph_refresh_timer_->stop();
+  std::this_thread::sleep_for (std::chrono::milliseconds(16));
+  displayed_topics_.clear();
+  plot_->clearGraphs();
+}
+
 
 }
 #include <pluginlib/class_list_macros.h>

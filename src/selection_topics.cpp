@@ -128,7 +128,6 @@ void SelectionTopics::okClicked()
 
         std::shared_ptr<TopicData> topic_data =
                 std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
-                ROS_WARN_STREAM("Push Back topic" << "\n" << "Topic size" << already_displayed_topics_.size());
             displayed_topics_.push_back(topic_data);
     }
   

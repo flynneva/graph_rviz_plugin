@@ -22,6 +22,7 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
+#include <algorithm>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/configure_axes.hpp>
@@ -39,7 +40,6 @@ Q_OBJECT
 public:
   GraphPanel(QWidget* parent = 0);
   virtual ~GraphPanel();
-  bool interruption_ = false ;
   std::shared_ptr<ros::NodeHandle> nh_;
 
 Q_SIGNALS:
