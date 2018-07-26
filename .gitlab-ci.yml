@@ -1,0 +1,31 @@
+image: ros:melodic-ros-core
+
+before_script:
+  - git clone https://gitlab.com/VictorLamoine/ros_gitlab_ci.git
+  - source ros_gitlab_ci/gitlab-ci.bash >/dev/null
+
+cache:
+  paths:
+    - ccache/
+
+# catkin_lint
+catkin lint:
+  stage: build
+  image: ros:melodic-ros-core
+  before_script:
+    - apt update  >/dev/null 2>&1
+    - apt install -y python-catkin-lint >/dev/null 2>&1
+  script:
+    - catkin_lint -W3 .
+
+# catkin_make
+catkin_make:
+  stage: build
+  script:
+    - catkin_make
+
+# catkin tools
+catkin tools:
+  stage: build
+  script:
+    - catkin build --summarize --no-status --force-color

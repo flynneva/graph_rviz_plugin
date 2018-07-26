@@ -23,7 +23,7 @@
 **          Version: 2.0.1                                                **
 ****************************************************************************/
 
-#include "rviz_graph_panel/qcustomplot.h"
+#include <rviz_graph_panel/qcustomplot.h>
 
 
 /* including file 'src/vector2d.cpp', size 7340                              */

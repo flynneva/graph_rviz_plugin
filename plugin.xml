@@ -4,7 +4,7 @@
          type="rviz_graph_plugin::GraphPanel"
          base_class_type="rviz::Panel">
     <description>
-      A graph panel
+      Draw graphs from ROS topic values
     </description>
   </class>
 </library>

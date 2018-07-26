@@ -10,6 +10,7 @@
 #include <QSpinBox>
 #include <QStringList>
 #include <deque>
+
 namespace rviz_graph_plugin
 {
 

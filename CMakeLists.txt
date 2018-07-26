@@ -23,11 +23,12 @@ set(
 
 set(
   PROJECT_TARGETS
+  ${PROJECT_QT_PANELS_TARGETS}
   ${PROJECT_NAME}_configure_axes
   ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
-  ${PROJECT_QT_PANELS_TARGETS}
+  ${PROJECT_NAME}_topics_data
 )
 
 ################################################
@@ -110,8 +111,9 @@ target_link_libraries(
   ${PROJECT_NAME}_topics_data
   Qt5::Widgets
   Qt5::Gui
- )
+)
 add_dependencies(
+  ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
   ${catkin_EXPORTED_TARGETS}
 )
@@ -133,6 +135,7 @@ target_link_libraries(
   Qt5::Gui
 )
 add_dependencies(
+  ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_topics_data
   ${catkin_EXPORTED_TARGETS}
 )
@@ -153,29 +156,29 @@ target_link_libraries(
   Qt5::Gui
 )
 add_dependencies(
-  ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_configure_axes
   ${catkin_EXPORTED_TARGETS}
 )
 
 ## Qt panel
 qt5_wrap_cpp(
-  panel_MOCS
+  ${PROJECT_NAME}_MOCS
   include/${PROJECT_NAME}/panel.hpp
 )
 add_library(
   ${PROJECT_NAME}
-  ${panel_MOCS}
+  ${${PROJECT_NAME}_MOCS}
   src/panel.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}
-  Qt5::Widgets
-  Qt5::Gui
   ${PROJECT_NAME}_configure_axes
   ${PROJECT_NAME}_configure_topics
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
+  Qt5::Widgets
+  Qt5::Gui
   ${catkin_LIBRARIES}
 )
 add_dependencies(
@@ -206,19 +209,28 @@ install(TARGETS
 )
 
 ## Mark cpp header files for installation
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+install(
+  DIRECTORY
+  include/${PROJECT_NAME}/
+  DESTINATION
+  ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-install(FILES
+install(
+  DIRECTORY
+  config
+  launch
+  DESTINATION
+  ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+install(
+  FILES
   plugin.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  DESTINATION
+  ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
 #############
 ## Testing ##
 #############
-

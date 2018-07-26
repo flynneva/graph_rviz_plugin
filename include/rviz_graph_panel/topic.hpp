@@ -1,5 +1,5 @@
-#ifndef TOPIC_HPP
-#define TOPIC_HPP
+#ifndef RVIZ_GRAPH_PANEL_TOPIC_HPP
+#define RVIZ_GRAPH_PANEL_TOPIC_HPP
 
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
