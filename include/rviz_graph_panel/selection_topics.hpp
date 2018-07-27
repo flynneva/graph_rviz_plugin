@@ -49,8 +49,8 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
   void displayMessageBoxHandler(const QString title,
-                                const QString message,
-                                const QString info_msg = "",
+                                const QString text,
+                                const QString info = "",
                                 const QMessageBox::Icon icon = QMessageBox::Icon::Information);
 
   void okClicked();

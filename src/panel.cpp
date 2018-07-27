@@ -10,9 +10,14 @@ GraphPanel::GraphPanel(QWidget *parent) :
   graph_refresh_timer_(new QTimer(this)),
   plot_(new QCustomPlot)
 {
-  qRegisterMetaType<QMessageBox::Icon>();
+  connect(this, SIGNAL(enable(const bool)), this, SLOT(setEnabled(const bool)));
   setName("Graph");
   setObjectName(getName());
+
+  qRegisterMetaType<QMessageBox::Icon>();
+  connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
+          this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
+
   QVBoxLayout *layout = new QVBoxLayout();
   setLayout(layout);
   QHBoxLayout *button_layout = new QHBoxLayout();
@@ -67,7 +72,7 @@ void GraphPanel::graphUpdate()
       QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
       QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
       plot_->addGraph();
-      //plot_->graph(i)->removeFromLegend(); //FIXME
+      //plot_->graph(i)->removeFromLegend();
       plot_->graph(i)->setName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
       plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
       plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
@@ -103,7 +108,7 @@ void GraphPanel::displayMessageBoxHandler(const QString title,
     const QMessageBox::Icon icon)
 {
   const bool old(isEnabled());
-  setEnabled(false);
+  Q_EMIT setEnabled(false);
   QMessageBox msg_box;
   msg_box.setWindowTitle(title);
   msg_box.setText(message);
@@ -111,7 +116,7 @@ void GraphPanel::displayMessageBoxHandler(const QString title,
   msg_box.setIcon(icon);
   msg_box.setStandardButtons(QMessageBox::Ok);
   msg_box.exec();
-  setEnabled(old);
+  Q_EMIT setEnabled(old);
 }
 
 void GraphPanel::load(const rviz::Config &config)

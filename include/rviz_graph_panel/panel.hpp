@@ -43,6 +43,7 @@ public:
   std::shared_ptr<ros::NodeHandle> nh_;
 
 Q_SIGNALS:
+  void enable(const bool);
   void displayMessageBox(const QString,
                          const QString,
                          const QString,
@@ -50,9 +51,9 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
   void displayMessageBoxHandler(const QString title,
-                                const QString message,
-                                const QString info_msg = "",
-                                const QMessageBox::Icon icon = QMessageBox::Information);
+                                const QString text,
+                                const QString info = "",
+                                const QMessageBox::Icon icon = QMessageBox::Icon::Information);
   virtual void load(const rviz::Config &config);
   virtual void save(rviz::Config config) const;
   void startStopClicked();
