@@ -8,7 +8,6 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
                                  QDialog *) :
         already_displayed_topics_(already_displayed_topics),
         nh_(nh)
-        
 {
   setWindowTitle("Topics Selection");
   QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
@@ -48,7 +47,7 @@ void SelectionTopics::detectTopics()
   ros::master::V_TopicInfo topics;
   if (!ros::master::getTopics(topics))
   {
-    Q_EMIT SelectionTopics::displayMessageBox("Error getting topics", "Could not retrieve the topics names.", "",
+    Q_EMIT displayMessageBox("Error getting topics", "Could not retrieve the topics names.", "",
                                               QMessageBox::Icon::Critical);
     return;
   }
@@ -71,7 +70,6 @@ void SelectionTopics::detectTopics()
 
   if (supported_topics_.empty())
   {
-
     QDialog *no_topics_dialog = new QDialog(this);
     no_topics_dialog->setWindowTitle("No supported topic");
     QVBoxLayout *layout = new QVBoxLayout;
@@ -102,36 +100,35 @@ void SelectionTopics::detectTopics()
 }
 
 void SelectionTopics::displayMessageBoxHandler(const QString title,
-                                               const QString message,
-                                               const QString info_msg,
-                                               const QMessageBox::Icon icon)
+                                              const QString text,
+                                              const QString info,
+                                              const QMessageBox::Icon icon)
 {
-  const bool old(isEnabled());
-  Q_EMIT setEnabled(false);
+  const bool old_state(isEnabled());
+  setEnabled(false);
   QMessageBox msg_box;
   msg_box.setWindowTitle(title);
-  msg_box.setText(message);
-  msg_box.setInformativeText(info_msg);
+  msg_box.setText(text);
+  msg_box.setInformativeText(info);
   msg_box.setIcon(icon);
   msg_box.setStandardButtons(QMessageBox::Ok);
   msg_box.exec();
-  Q_EMIT setEnabled(old);
+  setEnabled(old_state);
 }
 
 void SelectionTopics::okClicked()
 {
-    
     for (auto button : topic_buttons_ )
     {
-        if (!button->isChecked()) 
+        if (!button->isChecked())
             continue;
 
         std::shared_ptr<TopicData> topic_data =
                 std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
             displayed_topics_.push_back(topic_data);
     }
-  
-    
+
+
 accept();
 }
 

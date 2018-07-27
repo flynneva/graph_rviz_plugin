@@ -10,10 +10,14 @@ GraphPanel::GraphPanel(QWidget *parent) :
   graph_refresh_timer_(new QTimer(this)),
   plot_(new QCustomPlot)
 {
-  nh_.reset(new ros::NodeHandle);
-  qRegisterMetaType<QMessageBox::Icon>();
+  connect(this, SIGNAL(enable(const bool)), this, SLOT(setEnabled(const bool)));
   setName("Graph");
   setObjectName(getName());
+
+  qRegisterMetaType<QMessageBox::Icon>();
+  connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
+          this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
+
   QVBoxLayout *layout = new QVBoxLayout();
   setLayout(layout);
   QHBoxLayout *button_layout = new QHBoxLayout();
@@ -99,20 +103,20 @@ void GraphPanel::graphUpdate()
 }
 
 void GraphPanel::displayMessageBoxHandler(const QString title,
-    const QString message,
-    const QString info_msg,
-    const QMessageBox::Icon icon)
+                                          const QString text,
+                                          const QString info,
+                                          const QMessageBox::Icon icon)
 {
-  const bool old(isEnabled());
-  Q_EMIT setEnabled(false);
+  const bool old_state(isEnabled());
+  setEnabled(false);
   QMessageBox msg_box;
   msg_box.setWindowTitle(title);
-  msg_box.setText(message);
-  msg_box.setInformativeText(info_msg);
+  msg_box.setText(text);
+  msg_box.setInformativeText(info);
   msg_box.setIcon(icon);
   msg_box.setStandardButtons(QMessageBox::Ok);
   msg_box.exec();
-  Q_EMIT setEnabled(old);
+  setEnabled(old_state);
 }
 
 void GraphPanel::load(const rviz::Config &config)
@@ -157,7 +161,7 @@ void GraphPanel::topicsSelectionClicked()
     return;
   ROS_WARN_STREAM("Topic size " << displayed_topics_.size()); //FIXME
   displayed_topics_ = topic_window->displayed_topics_;
-  ROS_WARN_STREAM("Nombre de personnes utilisant le shared ptr " << displayed_topics_[0].use_count()); //FIXME 
+  ROS_WARN_STREAM("Nombre de personnes utilisant le shared ptr " << displayed_topics_[0].use_count()); //FIXME
 }
 
 void GraphPanel::configClicked()
