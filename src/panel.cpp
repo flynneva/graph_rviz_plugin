@@ -237,8 +237,13 @@ void GraphPanel::configClicked()
 
 void GraphPanel::axesClicked()
 {
-  AxesWindow *configure_axes = new AxesWindow;
-  configure_axes->exec();
+  AxesWindow *configure_axes = new AxesWindow(yaxis_rescale_auto_,window_time_enable_,y_min_,y_max_,w_time_);
+  if (!(configure_axes->exec()))
+    return;
+  
+  w_time_ = configure_axes->w_time_;
+  y_min_ = configure_axes->y_min_;
+  y_max_ = configure_axes->y_max;
 }
 
 void GraphPanel::clearClicked()

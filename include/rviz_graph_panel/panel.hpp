@@ -35,10 +35,10 @@ namespace rviz_graph_plugin
 
 class GraphPanel : public rviz::Panel
 {
-Q_OBJECT
+  Q_OBJECT
 
 public:
-  GraphPanel(QWidget* parent = 0);
+  GraphPanel(QWidget *parent = 0);
   virtual ~GraphPanel();
   std::shared_ptr<ros::NodeHandle> nh_;
 
@@ -69,6 +69,11 @@ private:
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   bool graph_running_ = true ;
+  bool yaxis_rescale_auto_ = true;
+  bool window_time_enable_ = false; 
+  double y_min_ = 0;
+  double y_max_ = 1;
+  double w_time_ = 1;
 
 
 };

@@ -1,5 +1,4 @@
 #include <rviz_graph_panel/topic.hpp>
-//FIXME The time's gestion
 
 namespace rviz_graph_plugin
 {
