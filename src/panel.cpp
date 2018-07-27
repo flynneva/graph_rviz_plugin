@@ -72,7 +72,7 @@ void GraphPanel::graphUpdate()
       QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
       QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
       plot_->addGraph();
-      //plot_->graph(i)->removeFromLegend();
+      plot_->graph(i)->removeFromLegend();
       plot_->graph(i)->setName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
       plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
       plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
@@ -159,6 +159,12 @@ void GraphPanel::topicsSelectionClicked()
 
   if (!(topic_window->exec()))
     return;
+  if (graph_running_ == true)
+  {
+    Q_EMIT startStopClicked();
+  }
+  Q_EMIT clearClicked();
+  
   ROS_WARN_STREAM("Topic size " << displayed_topics_.size()); //FIXME
   displayed_topics_ = topic_window->displayed_topics_;
   ROS_WARN_STREAM("Nombre de personnes utilisant le shared ptr " << displayed_topics_[0].use_count()); //FIXME 
@@ -237,10 +243,15 @@ void GraphPanel::axesClicked()
 
 void GraphPanel::clearClicked()
 {
-  graph_refresh_timer_->stop();
+  if (graph_running_ == true)
+    Q_EMIT startStopClicked();
+  else
+    graph_refresh_timer_->stop();
   std::this_thread::sleep_for (std::chrono::milliseconds(16));
   displayed_topics_.clear();
-  plot_->clearGraphs();
+  plot_->legend->setVisible(false);
+  plot_->clearPlottables();
+  plot_->replot();
 }
 
 
