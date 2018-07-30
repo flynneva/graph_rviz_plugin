@@ -1,7 +1,7 @@
-#ifndef CONFIG_WINDOW_HPP
-#define CONFIG_WINDOW_HPP
+#ifndef RVIZ_GRAPH_PANEL_CONFIGURE_HPP
+#define RVIZ_GRAPH_PANEL_CONFIGURE_HPP
 
-#include <rviz_graph_panel/topic.hpp>
+#include <rviz_graph_panel/topic_data.hpp>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QColor>
@@ -14,13 +14,14 @@
 namespace rviz_graph_plugin
 {
 
-class ConfigWindow : public QDialog
+class Configure : public QDialog
 {
   Q_OBJECT
 
 public:
-  ConfigWindow(QDialog *parent = 0);
-  ~ConfigWindow();
+  Configure(QDialog *parent = 0);
+  ~Configure();
+  // FIXME Make displayed_topics_ private
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   void WindowConstruction();
   std::vector<QCheckBox *> topic_buttons_;

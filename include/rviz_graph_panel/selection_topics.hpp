@@ -22,14 +22,14 @@
 #include <deque>
 #include <mutex>
 #include <rviz_graph_panel/qcustomplot.h>
-#include <rviz_graph_panel/topic.hpp>
+#include <rviz_graph_panel/topic_data.hpp>
 
 namespace rviz_graph_plugin
 {
 
 class SelectionTopics : public QDialog
 {
-Q_OBJECT
+  Q_OBJECT
 
 public:
   SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,

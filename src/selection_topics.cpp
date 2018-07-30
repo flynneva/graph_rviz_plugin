@@ -70,6 +70,9 @@ void SelectionTopics::detectTopics()
       supported_topics_.push_back(topic);
   }
 
+  // FIXME When no supported topics is found, the user can still continue selecting (zero) topics/
+  // The next QDialog should not be displayed after the error message.
+  // Maybe it's a better idea to use a Q_EMIT displayMessageBox and return
   if (supported_topics_.empty())
   {
     QDialog *no_topics_dialog = new QDialog(this);
@@ -129,6 +132,7 @@ void SelectionTopics::okClicked()
       std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
     displayed_topics_.push_back(topic_data);
   }
+
   accept();
 }
 

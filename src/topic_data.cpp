@@ -1,4 +1,4 @@
-#include <rviz_graph_panel/topic.hpp>
+#include <rviz_graph_panel/topic_data.hpp>
 
 namespace rviz_graph_plugin
 {
@@ -52,6 +52,12 @@ TopicData::~TopicData()
 {
 }
 
+// FIXME Write a function pushData(const double data, const ros::Time now) and use it everywhere
+// There is a lot of duplicated code right now
+
+// FIXME Inform the user when the memory is full!!!! Right now the data is cleared and that's it.
+// The main application will not stop the recording, the user won't get notified, this is bad.
+
 void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
@@ -69,6 +75,7 @@ void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
       }
 
       double time = (ros::Time::now()).toSec() - begin_.toSec();
+
       try
       {
         topic_time_.push_back(time);
@@ -93,6 +100,7 @@ void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
         ROS_ERROR_STREAM("Memory is full");
         topic_time_.clear();
       }
+
       double time = (ros::Time::now()).toSec() - begin_.toSec();
 
       try
@@ -129,6 +137,7 @@ void TopicData::durationCallback(const std_msgs::DurationConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -160,6 +169,7 @@ void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -191,6 +201,7 @@ void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -200,6 +211,7 @@ void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -221,6 +233,7 @@ void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -230,6 +243,7 @@ void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -251,6 +265,7 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -260,6 +275,7 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -281,6 +297,7 @@ void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -290,6 +307,7 @@ void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -311,6 +329,7 @@ void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -320,6 +339,7 @@ void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -341,6 +361,7 @@ void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -350,6 +371,7 @@ void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -371,6 +393,7 @@ void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -380,6 +403,7 @@ void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -401,6 +425,7 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -410,6 +435,7 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }
@@ -431,6 +457,7 @@ void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -462,6 +489,7 @@ void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
   }
 
   double time = (ros::Time::now()).toSec() - begin_.toSec();
+
   try
   {
     topic_time_.push_back(time);
@@ -471,6 +499,7 @@ void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
+
   data_update_ = true;
   return;
 }

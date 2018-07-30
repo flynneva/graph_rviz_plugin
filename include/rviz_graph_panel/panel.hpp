@@ -16,6 +16,7 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <atomic>
 #include <deque>
 #include <memory>
 #include <thread>
@@ -24,10 +25,10 @@
 #include <thread>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
+#include <rviz_graph_panel/configure.hpp>
 #include <rviz_graph_panel/configure_axes.hpp>
-#include <rviz_graph_panel/configure_topics.hpp>
 #include <rviz_graph_panel/selection_topics.hpp>
-#include <rviz_graph_panel/topic.hpp>
+#include <rviz_graph_panel/topic_data.hpp>
 
 namespace rviz_graph_plugin
 {
@@ -68,9 +69,9 @@ private:
   QTimer *graph_refresh_timer_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
-  bool graph_running_ = true ;
-  bool yaxis_rescale_auto_ = true;
-  bool window_time_enable_ = false;
+  std::atomic<bool> graph_running_;
+  std::atomic<bool> yaxis_rescale_auto_;
+  std::atomic<bool> window_time_enable_;
   double y_min_ = 0;
   double y_max_ = 1;
   double w_time_ = 1;

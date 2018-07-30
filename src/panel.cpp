@@ -15,33 +15,38 @@ GraphPanel::GraphPanel(QWidget *parent) :
   setName("Graph");
   setObjectName(getName());
 
+  // FIXME Delete graph_running_ and use graph_refresh_timer_->isActive()
+  graph_running_ = false;
+  yaxis_rescale_auto_ = true;
+  window_time_enable_ = false;
+
   qRegisterMetaType<QMessageBox::Icon>();
   connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
           this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
 
-  QVBoxLayout *layout = new QVBoxLayout();
-  setLayout(layout);
-  QHBoxLayout *button_layout = new QHBoxLayout();
-  QPushButton *config_button = new QPushButton("Config");
+  connect(topic_button_, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
+  QPushButton *config_button = new QPushButton("Configure");
+  connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   QPushButton *axes_button = new QPushButton("Axes");
+  connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
   QPushButton *clear_button = new QPushButton("Clear");
-  start_stop_button_->setText("Stop");
+  connect(clear_button, SIGNAL(clicked()), SLOT(clearClicked()));
+
+  start_stop_button_->setText("Start");
+  connect(start_stop_button_, SIGNAL(clicked()), SLOT(startStopClicked()));
+
+  QHBoxLayout *button_layout = new QHBoxLayout();
   button_layout->addWidget(start_stop_button_);
   button_layout->addWidget(topic_button_);
   button_layout->addWidget(config_button);
   button_layout->addWidget(axes_button);
   button_layout->addWidget(clear_button);
 
+  QVBoxLayout *layout = new QVBoxLayout();
+  setLayout(layout);
   layout->addLayout(button_layout);
   layout->addWidget(plot_);
 
-  graph_refresh_timer_->start(16);
-
-  connect(start_stop_button_, SIGNAL(clicked()), SLOT(startStopClicked()));
-  connect(topic_button_, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
-  connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
-  connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
-  connect(clear_button, SIGNAL(clicked()), SLOT(clearClicked()));
   connect(graph_refresh_timer_, SIGNAL(timeout()), this, SLOT(graphUpdate()));
 }
 
@@ -53,7 +58,7 @@ GraphPanel::~GraphPanel()
 
 void GraphPanel::graphUpdate()
 {
-
+  // FIXME Add a boolean in configure to choose if legend should be displayed or not.
   plot_->legend->setVisible(true);
   QFont legendFont = font();
   legendFont.setPointSize(9);
@@ -65,26 +70,27 @@ void GraphPanel::graphUpdate()
 
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
-    if ((*displayed_topics_[i]).data_update_ == true && (*displayed_topics_[i]).graph_enable_ == false)
+    // FIXME Simplify these two if
+    if (displayed_topics_.at(i)->data_update_ == true && displayed_topics_.at(i)->graph_enable_ == false)
     {
-      QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
-      QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
+      QVector<double> topic_data = displayed_topics_.at(i)->getTopicData();
+      QVector<double> topic_time = displayed_topics_.at(i)->getTopicTime();
       plot_->addGraph();
       plot_->graph(i)->removeFromLegend();
-      plot_->graph(i)->setName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
-      plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
-      plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
+      plot_->graph(i)->setName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
+      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_));
+      plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
       plot_->graph(i)->setData(topic_time, topic_data);
-      plot_->graph(i)->setVisible((*displayed_topics_[i]).displayed_);
-      (*displayed_topics_[i]).data_update_ = false;
-      (*displayed_topics_[i]).graph_enable_ = true;
+      plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
+      displayed_topics_.at(i)->data_update_ = false;
+      displayed_topics_.at(i)->graph_enable_ = true;
       plot_->graph(i)->addToLegend();
     }
 
-    if ((*displayed_topics_[i]).data_update_ == true)
+    if (displayed_topics_.at(i)->data_update_ == true)
     {
-      QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
-      QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
+      QVector<double> topic_data = displayed_topics_.at(i)->getTopicData();
+      QVector<double> topic_time = displayed_topics_.at(i)->getTopicTime();
 
       if (yaxis_rescale_auto_ == true)
         plot_->yAxis->rescale(true);
@@ -96,11 +102,11 @@ void GraphPanel::graphUpdate()
       else
         plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignCenter);
 
-      plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
-      plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
-      plot_->graph(i)->setVisible((*displayed_topics_[i]).displayed_);
+      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_));
+      plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
+      plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
       plot_->graph(i)->setData(topic_time, topic_data);
-      (*displayed_topics_[i]).data_update_ = false;
+      displayed_topics_.at(i)->data_update_ = false;
       plot_->replot();
     }
   }
@@ -126,17 +132,21 @@ void GraphPanel::displayMessageBoxHandler(const QString title,
 void GraphPanel::load(const rviz::Config &config)
 {
   rviz::Panel::load(config);
+  // FIXME Load the configuration (axes, topics)
+  // Do not save/load the graphs (values/time vector)
 }
 
 void GraphPanel::save(rviz::Config config) const
 {
   rviz::Panel::save(config);
+  // FIXME Save the configuration (same as load)
 }
 
 void GraphPanel::startStopClicked()
 {
   if (graph_running_ == false)
   {
+    // FIXME 16 should be a internal const variable of the class (refresh_period_ms_)
     graph_refresh_timer_->start(16);
     start_stop_button_->setText("Stop");
     graph_running_ = true ;
@@ -145,8 +155,7 @@ void GraphPanel::startStopClicked()
     topic_button_->setEnabled(false);
     return;
   }
-
-  if (graph_running_ == true)
+  else
   {
     graph_refresh_timer_->stop();
     start_stop_button_->setText("Start");
@@ -155,25 +164,26 @@ void GraphPanel::startStopClicked()
     topic_button_->setEnabled(true);
     return;
   }
-
 }
 
 void GraphPanel::topicsSelectionClicked()
 {
   SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_);
+
   if (!(topic_window->exec()))
     return;
 
   if (graph_running_ == true)
     Q_EMIT startStopClicked();
-  
+
   Q_EMIT clearClicked();
   displayed_topics_ = topic_window->displayed_topics_;
 }
 
 void GraphPanel::configClicked()
 {
-  ConfigWindow *configure_topics = new ConfigWindow;
+  // FIXME Pass displayed_topics_ in the constructor, remove WindowConstruction
+  Configure *configure_topics = new Configure;
   configure_topics->displayed_topics_ = displayed_topics_;
   configure_topics->WindowConstruction();
 
@@ -184,13 +194,13 @@ void GraphPanel::configClicked()
   {
     for (unsigned i = 0; i < displayed_topics_.size(); i++)
     {
-      if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
+      if ((displayed_topics_.at(i)->topic_name_) == button->objectName().toStdString()
           && button->isChecked())
-        (*displayed_topics_[i]).displayed_ = true;
+        displayed_topics_.at(i)->displayed_ = true;
 
-      if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
+      if ((displayed_topics_.at(i)->topic_name_) == button->objectName().toStdString()
           && !button->isChecked())
-        (*displayed_topics_[i]).displayed_ = false;
+        displayed_topics_.at(i)->displayed_ = false;
     }
   }
 
@@ -198,8 +208,8 @@ void GraphPanel::configClicked()
   {
     for (unsigned i = 0; i < displayed_topics_.size(); i++)
     {
-      if (((*displayed_topics_[i]).topic_name_) == spinbox->objectName().toStdString())
-        (*displayed_topics_[i]).thickness_ = spinbox->value();
+      if ((displayed_topics_.at(i)->topic_name_) == spinbox->objectName().toStdString())
+        displayed_topics_.at(i)->thickness_ = spinbox->value();
     }
   }
 
@@ -207,42 +217,45 @@ void GraphPanel::configClicked()
   {
     for (unsigned i = 0; i < displayed_topics_.size(); i++)
     {
-      if (((*displayed_topics_[i]).topic_name_) == combobox->objectName().toStdString())
+      if ((displayed_topics_.at(i)->topic_name_) == combobox->objectName().toStdString())
       {
         int index = combobox->currentIndex();
 
         if (index == 0) //blue
-          (*displayed_topics_[i]).color_ = QColor(0, 0, 255);
+          displayed_topics_.at(i)->color_ = QColor(0, 0, 255);
 
         if (index == 1) //red
-          (*displayed_topics_[i]).color_ = QColor(255, 0, 0);
+          displayed_topics_.at(i)->color_ = QColor(255, 0, 0);
 
         if (index == 2) //black
-          (*displayed_topics_[i]).color_ = QColor(0, 0, 0);
+          displayed_topics_.at(i)->color_ = QColor(0, 0, 0);
 
         if (index == 3) //cyan
-          (*displayed_topics_[i]).color_ = QColor(0, 255, 255);
+          displayed_topics_.at(i)->color_ = QColor(0, 255, 255);
 
         if (index == 4) //yellow
-          (*displayed_topics_[i]).color_ = QColor(255, 255, 0);
+          displayed_topics_.at(i)->color_ = QColor(255, 255, 0);
 
         if (index == 5) //gray
-          (*displayed_topics_[i]).color_ = QColor(192, 192, 192);
+          displayed_topics_.at(i)->color_ = QColor(192, 192, 192);
+
+        // FIXME If index == 6, what happens ?????? You need to use if / else if / else
       }
     }
   }
+
   return;
 }
 
 void GraphPanel::axesClicked()
 {
-  AxesWindow *configure_axes = new AxesWindow(yaxis_rescale_auto_, window_time_enable_, y_min_, y_max_, w_time_);
+  ConfigureAxes *configure_axes = new ConfigureAxes(yaxis_rescale_auto_, window_time_enable_, y_min_, y_max_, w_time_);
 
   if (!(configure_axes->exec()))
     return;
 
   window_time_enable_ = configure_axes->window_time_enable_;
-  yaxis_rescale_auto_ = configure_axes->rescale_auto_;
+  yaxis_rescale_auto_ = configure_axes->scale_auto_;
   w_time_ = configure_axes->w_time_;
   y_min_ = configure_axes->y_min_;
   y_max_ = configure_axes->y_max_;
@@ -255,6 +268,8 @@ void GraphPanel::clearClicked()
   else
     graph_refresh_timer_->stop();
 
+  // FIXME Wait at least twice the amount of the refresh timer period (2*refresh_period_ms_)
+  // FIXME Not good: thiis is the main gui, any "sleep" freezes the UI ! Is it necessary to wait?
   std::this_thread::sleep_for(std::chrono::milliseconds(16));
   displayed_topics_.clear();
   plot_->legend->setVisible(false);
@@ -262,7 +277,7 @@ void GraphPanel::clearClicked()
   plot_->replot();
 }
 
-
 }
 #include <pluginlib/class_list_macros.h>
 PLUGINLIB_EXPORT_CLASS(rviz_graph_plugin::GraphPanel, rviz::Panel)
+

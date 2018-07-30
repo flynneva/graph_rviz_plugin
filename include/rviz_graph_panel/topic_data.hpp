@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_TOPIC_HPP
-#define RVIZ_GRAPH_PANEL_TOPIC_HPP
+#ifndef RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
+#define RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
 
 #ifndef Q_MOC_RUN
 #include <ros/ros.h>
@@ -35,8 +35,8 @@ namespace rviz_graph_plugin
 
 class TopicData : public QObject
 {
-Q_OBJECT
-  public:
+  Q_OBJECT
+public:
   TopicData(std::string topic_name,
             std::string topic_type,
             std::shared_ptr<ros::NodeHandle>,
