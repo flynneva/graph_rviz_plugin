@@ -52,13 +52,11 @@ protected Q_SLOTS:
                                 const QString text,
                                 const QString info = "",
                                 const QMessageBox::Icon icon = QMessageBox::Icon::Information);
-
   void okClicked();
 
 private:
   ros::master::V_TopicInfo supported_topics_;
   std::vector<QCheckBox *> topic_buttons_;
-
 };
 
 }

@@ -30,18 +30,25 @@ void ConfigWindow::WindowConstruction()
     topic_combobox_.push_back(color_selection_combobox);
     color_selection_combobox->setObjectName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
     color_selection_combobox->addItems(color_list);
-        if ((*displayed_topics_[i]).color_ == QColor(0, 0, 255)) //blue
-          color_selection_combobox->setCurrentIndex(0);
-        if ((*displayed_topics_[i]).color_ == QColor(255, 0, 0)) //red
-          color_selection_combobox->setCurrentIndex(1);
-        if ((*displayed_topics_[i]).color_ == QColor(0, 0, 0)) //black
-          color_selection_combobox->setCurrentIndex(2);
-        if ((*displayed_topics_[i]).color_ == QColor(0, 255, 255)) //cyan
-          color_selection_combobox->setCurrentIndex(3);
-        if ((*displayed_topics_[i]).color_ == QColor(255, 255, 0)) //yellow
-          color_selection_combobox->setCurrentIndex(4);
-        if ((*displayed_topics_[i]).color_ == QColor(192, 192, 192)) //gray
-          color_selection_combobox->setCurrentIndex(5);
+
+    if ((*displayed_topics_[i]).color_ == QColor(0, 0, 255)) //blue
+      color_selection_combobox->setCurrentIndex(0);
+
+    if ((*displayed_topics_[i]).color_ == QColor(255, 0, 0)) //red
+      color_selection_combobox->setCurrentIndex(1);
+
+    if ((*displayed_topics_[i]).color_ == QColor(0, 0, 0)) //black
+      color_selection_combobox->setCurrentIndex(2);
+
+    if ((*displayed_topics_[i]).color_ == QColor(0, 255, 255)) //cyan
+      color_selection_combobox->setCurrentIndex(3);
+
+    if ((*displayed_topics_[i]).color_ == QColor(255, 255, 0)) //yellow
+      color_selection_combobox->setCurrentIndex(4);
+
+    if ((*displayed_topics_[i]).color_ == QColor(192, 192, 192)) //gray
+      color_selection_combobox->setCurrentIndex(5);
+
     topic_form->addRow("Color", color_selection_combobox);
 
     QSpinBox *thickness_spin_box = new QSpinBox;
@@ -55,12 +62,14 @@ void ConfigWindow::WindowConstruction()
     topic_buttons_.push_back(topic_checkbox);
     topic_checkbox->setObjectName(QString::fromStdString((*displayed_topics_[i]).topic_name_));
     topic_checkbox->setChecked(true);
-    if((*displayed_topics_[i]).displayed_ == false )
-        topic_checkbox->setChecked(false);
+
+    if ((*displayed_topics_[i]).displayed_ == false)
+      topic_checkbox->setChecked(false);
+
     topic_form->addRow("Display", topic_checkbox);
     form_layout->addLayout(topic_form);
-
   }
+
   configure_layout->addLayout(form_layout);
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
       | QDialogButtonBox::Cancel);
@@ -80,6 +89,7 @@ void ConfigWindow::okClicked()
       if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
           && button->isChecked())
         (*displayed_topics_[i]).displayed_ = true;
+
       if (((*displayed_topics_[i]).topic_name_) == button->objectName().toStdString()
           && !button->isChecked())
         (*displayed_topics_[i]).displayed_ = false;
@@ -104,14 +114,19 @@ void ConfigWindow::okClicked()
         int index = combobox->currentIndex();
         if (index == 0) //blue
           (*displayed_topics_[i]).color_ = QColor(0, 0, 255);
+
         if (index == 1) //red
           (*displayed_topics_[i]).color_ = QColor(255, 0, 0);
+
         if (index == 2) //black
           (*displayed_topics_[i]).color_ = QColor(0, 0, 0);
+
         if (index == 3) //cyan
           (*displayed_topics_[i]).color_ = QColor(0, 255, 255);
+
         if (index == 4) //yellow
           (*displayed_topics_[i]).color_ = QColor(255, 255, 0);
+
         if (index == 5) //gray
           (*displayed_topics_[i]).color_ = QColor(192, 192, 192);
       }

@@ -7,6 +7,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   rviz::Panel(parent),
   nh_(std::make_shared<ros::NodeHandle>()),
   start_stop_button_(new QPushButton),
+  topic_button_(new QPushButton("Topics")),
   graph_refresh_timer_(new QTimer(this)),
   plot_(new QCustomPlot)
 {
@@ -21,13 +22,12 @@ GraphPanel::GraphPanel(QWidget *parent) :
   QVBoxLayout *layout = new QVBoxLayout();
   setLayout(layout);
   QHBoxLayout *button_layout = new QHBoxLayout();
-  QPushButton *topic_button = new QPushButton("Topics");
   QPushButton *config_button = new QPushButton("Config");
   QPushButton *axes_button = new QPushButton("Axes");
   QPushButton *clear_button = new QPushButton("Clear");
   start_stop_button_->setText("Stop");
   button_layout->addWidget(start_stop_button_);
-  button_layout->addWidget(topic_button);
+  button_layout->addWidget(topic_button_);
   button_layout->addWidget(config_button);
   button_layout->addWidget(axes_button);
   button_layout->addWidget(clear_button);
@@ -38,7 +38,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   graph_refresh_timer_->start(16);
 
   connect(start_stop_button_, SIGNAL(clicked()), SLOT(startStopClicked()));
-  connect(topic_button, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
+  connect(topic_button_, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
   connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
   connect(clear_button, SIGNAL(clicked()), SLOT(clearClicked()));
@@ -79,7 +79,6 @@ void GraphPanel::graphUpdate()
       (*displayed_topics_[i]).data_update_ = false;
       (*displayed_topics_[i]).graph_enable_ = true;
       plot_->graph(i)->addToLegend();
-
     }
 
     if ((*displayed_topics_[i]).data_update_ == true)
@@ -95,7 +94,7 @@ void GraphPanel::graphUpdate()
       if (window_time_enable_ == false)
         plot_->xAxis->rescale(true);
       else
-        plot_->xAxis->setRange(topic_time.last(),w_time_, Qt::AlignCenter);
+        plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignCenter);
 
       plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
       plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
@@ -143,6 +142,7 @@ void GraphPanel::startStopClicked()
     graph_running_ = true ;
     plot_->setInteraction(QCP::iRangeZoom, false);
     plot_->setInteraction(QCP::iRangeDrag, false);
+    topic_button_->setEnabled(false);
     return;
   }
 
@@ -152,6 +152,7 @@ void GraphPanel::startStopClicked()
     start_stop_button_->setText("Start");
     graph_running_ = false;
     plot_->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+    topic_button_->setEnabled(true);
     return;
   }
 
@@ -159,24 +160,19 @@ void GraphPanel::startStopClicked()
 
 void GraphPanel::topicsSelectionClicked()
 {
-
   SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_);
-
   if (!(topic_window->exec()))
     return;
 
   if (graph_running_ == true)
-  {
     Q_EMIT startStopClicked();
-  }
-
+  
   Q_EMIT clearClicked();
   displayed_topics_ = topic_window->displayed_topics_;
 }
 
 void GraphPanel::configClicked()
 {
-
   ConfigWindow *configure_topics = new ConfigWindow;
   configure_topics->displayed_topics_ = displayed_topics_;
   configure_topics->WindowConstruction();
@@ -235,7 +231,6 @@ void GraphPanel::configClicked()
       }
     }
   }
-
   return;
 }
 

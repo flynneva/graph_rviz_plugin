@@ -6,8 +6,8 @@ namespace rviz_graph_plugin
 SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
                                  std::deque<std::shared_ptr<TopicData>> already_displayed_topics,
                                  QDialog *) :
-        already_displayed_topics_(already_displayed_topics),
-        nh_(nh)
+  already_displayed_topics_(already_displayed_topics),
+  nh_(nh)
 {
   setWindowTitle("Topics Selection");
   QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
@@ -21,11 +21,13 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
     radio_button->setText(QString::fromStdString(topic.name));
     radio_button->setObjectName(QString::fromStdString(topic.name));
     radio_button->setToolTip(QString::fromStdString(topic.datatype));
+
     for (unsigned i = 0; i < already_displayed_topics_.size(); i++)
     {
-        if((*already_displayed_topics_[i]).topic_name_ == topic.name)
-            radio_button->setChecked(true);
+      if ((*already_displayed_topics_[i]).topic_name_ == topic.name)
+        radio_button->setChecked(true);
     }
+
     pick_topics_dialog->addWidget(radio_button);
   }
 
@@ -43,12 +45,12 @@ SelectionTopics::~SelectionTopics()
 
 void SelectionTopics::detectTopics()
 {
-
   ros::master::V_TopicInfo topics;
+
   if (!ros::master::getTopics(topics))
   {
     Q_EMIT displayMessageBox("Error getting topics", "Could not retrieve the topics names.", "",
-                                              QMessageBox::Icon::Critical);
+                             QMessageBox::Icon::Critical);
     return;
   }
 
@@ -75,8 +77,8 @@ void SelectionTopics::detectTopics()
     QVBoxLayout *layout = new QVBoxLayout;
     no_topics_dialog->setLayout(layout);
     layout->addWidget(
-        new QLabel("Error with topics, no supported topics found.\n"
-                   "- Ok will clear the topics displayed\n- Cancel will not change the displayed topics"));
+      new QLabel("Error with topics, no supported topics found.\n"
+                 "- Ok will clear the topics displayed\n- Cancel will not change the displayed topics"));
 
     QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
         | QDialogButtonBox::Cancel);
@@ -100,9 +102,9 @@ void SelectionTopics::detectTopics()
 }
 
 void SelectionTopics::displayMessageBoxHandler(const QString title,
-                                              const QString text,
-                                              const QString info,
-                                              const QMessageBox::Icon icon)
+    const QString text,
+    const QString info,
+    const QMessageBox::Icon icon)
 {
   const bool old_state(isEnabled());
   setEnabled(false);
@@ -118,18 +120,16 @@ void SelectionTopics::displayMessageBoxHandler(const QString title,
 
 void SelectionTopics::okClicked()
 {
-    for (auto button : topic_buttons_ )
-    {
-        if (!button->isChecked())
-            continue;
+  for (auto button : topic_buttons_)
+  {
+    if (!button->isChecked())
+      continue;
 
-        std::shared_ptr<TopicData> topic_data =
-                std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
-            displayed_topics_.push_back(topic_data);
-    }
-
-
-accept();
+    std::shared_ptr<TopicData> topic_data =
+      std::make_shared<TopicData>(button->objectName().toStdString(), button->toolTip().toStdString(), nh_);
+    displayed_topics_.push_back(topic_data);
+  }
+  accept();
 }
 
 }

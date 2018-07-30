@@ -22,7 +22,6 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
-#include <algorithm>
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/configure_axes.hpp>
@@ -65,17 +64,16 @@ protected Q_SLOTS:
 
 private:
   QPushButton *start_stop_button_;
+  QPushButton *topic_button_;
   QTimer *graph_refresh_timer_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   bool graph_running_ = true ;
   bool yaxis_rescale_auto_ = true;
-  bool window_time_enable_ = false; 
+  bool window_time_enable_ = false;
   double y_min_ = 0;
   double y_max_ = 1;
   double w_time_ = 1;
-
-
 };
 
 }

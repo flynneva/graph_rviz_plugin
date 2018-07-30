@@ -12,7 +12,6 @@ AxesWindow::AxesWindow(bool rescale_auto, bool window_time_enable, double y_min,
   y_min_double_spin_box_(new QDoubleSpinBox),
   y_max_double_spin_box_(new QDoubleSpinBox),
   w_time_double_spin_box_(new QDoubleSpinBox)
-
 {
   setWindowTitle("Axes Configuration");
   QVBoxLayout *main_layout = new QVBoxLayout;
@@ -31,14 +30,13 @@ AxesWindow::AxesWindow(bool rescale_auto, bool window_time_enable, double y_min,
   }
   else
   {
-    ROS_WARN_STREAM("Ymin" << y_min_);
-    ROS_ERROR_STREAM("Ymax" << y_max_);
     y_axis_autoscalle->setChecked(false);
     y_min_double_spin_box_->setEnabled(true);
     y_max_double_spin_box_->setEnabled(true);
     y_min_double_spin_box_->setValue(y_min_);
     y_max_double_spin_box_->setValue(y_max_);
   }
+  
   y_axis_layout->addRow("Y Max : ", y_max_double_spin_box_);
   y_axis_layout->addRow("Y Min : ", y_min_double_spin_box_);
   y_axis_groupbox->setLayout(y_axis_layout);
@@ -68,16 +66,12 @@ AxesWindow::AxesWindow(bool rescale_auto, bool window_time_enable, double y_min,
   connect(y_axis_autoscalle, SIGNAL(toggled(bool)), SLOT(yAxisAutoscale(bool)));
   connect(x_axis_window_time_button, SIGNAL(toggled(bool)), SLOT(xAxisWindowTime(bool)));
 
-
-
-
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
       | QDialogButtonBox::Cancel);
   main_layout->addWidget(button_box);
 
   connect(button_box, &QDialogButtonBox::accepted, this, &AxesWindow::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
 }
 
 AxesWindow::~AxesWindow()
@@ -91,7 +85,6 @@ void AxesWindow::yAxisAutoscale(bool checked)
     y_min_double_spin_box_->setEnabled(true);
     y_max_double_spin_box_->setEnabled(true);
     rescale_auto_ = false ;
-
   }
   else
   {
@@ -128,10 +121,7 @@ void AxesWindow::okClicked()
   {
     w_time_ = w_time_double_spin_box_->value();
   }
-
   accept();
 }
-
-
 
 }

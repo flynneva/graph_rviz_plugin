@@ -1,8 +1,6 @@
 #ifndef RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
 #define RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
 
-#include <ros/ros.h>
-
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -36,9 +34,6 @@ private:
   QDoubleSpinBox *y_min_double_spin_box_ ;
   QDoubleSpinBox *y_max_double_spin_box_ ;
   QDoubleSpinBox *w_time_double_spin_box_ ;
-
-
-
 };
 
 }
