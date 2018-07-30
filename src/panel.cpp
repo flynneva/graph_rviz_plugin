@@ -41,7 +41,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   connect(topic_button, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
   connect(config_button, SIGNAL(clicked()), SLOT(configClicked()));
   connect(axes_button, SIGNAL(clicked()), SLOT(axesClicked()));
-  connect(clear_button,SIGNAL(clicked()),SLOT(clearClicked()));
+  connect(clear_button, SIGNAL(clicked()), SLOT(clearClicked()));
   connect(graph_refresh_timer_, SIGNAL(timeout()), this, SLOT(graphUpdate()));
 }
 
@@ -59,8 +59,6 @@ void GraphPanel::graphUpdate()
   legendFont.setPointSize(9);
   plot_->legend->setFont(legendFont);
   plot_->legend->setBrush(QBrush(QColor(255, 255, 255, 230)));
-  //ROS_WARN_STREAM("nh_" << nh_->ok());
-  ROS_INFO_STREAM("Number of Topic " << displayed_topics_.size()); //FIXME
 
   if (graph_running_ == false)
     return;
@@ -88,12 +86,19 @@ void GraphPanel::graphUpdate()
     {
       QVector<double> topic_data = (*displayed_topics_[i]).getTopicData();
       QVector<double> topic_time = (*displayed_topics_[i]).getTopicTime();
+
+      if (yaxis_rescale_auto_ == true)
+        plot_->yAxis->rescale(true);
+      else
+        plot_->yAxis->setRange(y_min_, y_max_);
+
+      if (window_time_enable_ == false)
+        plot_->xAxis->rescale(true);
+      else
+        plot_->xAxis->setRange(topic_time.last(),w_time_, Qt::AlignCenter);
+
       plot_->graph(i)->setPen(QPen((*displayed_topics_[i]).color_));
       plot_->graph(i)->setLineStyle((*displayed_topics_[i]).line_style_);
-      plot_->xAxis->rescale(true);
-      plot_->yAxis->rescale(true);
-//       plot_->xAxis->setRange(*std::min_element(topic_time.constBegin(), topic_time.constEnd()), *std::max_element(topic_time.constBegin(), topic_time.constEnd()));
-//       plot_->yAxis->setRange((*std::min_element(topic_data.constBegin(), topic_data.constEnd())-1), (*std::max_element(topic_data.constBegin(), topic_data.constEnd())+1)); //FIXME
       plot_->graph(i)->setVisible((*displayed_topics_[i]).displayed_);
       plot_->graph(i)->setData(topic_time, topic_data);
       (*displayed_topics_[i]).data_update_ = false;
@@ -159,15 +164,14 @@ void GraphPanel::topicsSelectionClicked()
 
   if (!(topic_window->exec()))
     return;
+
   if (graph_running_ == true)
   {
     Q_EMIT startStopClicked();
   }
+
   Q_EMIT clearClicked();
-  
-  ROS_WARN_STREAM("Topic size " << displayed_topics_.size()); //FIXME
   displayed_topics_ = topic_window->displayed_topics_;
-  ROS_WARN_STREAM("Nombre de personnes utilisant le shared ptr " << displayed_topics_[0].use_count()); //FIXME 
 }
 
 void GraphPanel::configClicked()
@@ -237,13 +241,16 @@ void GraphPanel::configClicked()
 
 void GraphPanel::axesClicked()
 {
-  AxesWindow *configure_axes = new AxesWindow(yaxis_rescale_auto_,window_time_enable_,y_min_,y_max_,w_time_);
+  AxesWindow *configure_axes = new AxesWindow(yaxis_rescale_auto_, window_time_enable_, y_min_, y_max_, w_time_);
+
   if (!(configure_axes->exec()))
     return;
-  
+
+  window_time_enable_ = configure_axes->window_time_enable_;
+  yaxis_rescale_auto_ = configure_axes->rescale_auto_;
   w_time_ = configure_axes->w_time_;
   y_min_ = configure_axes->y_min_;
-  y_max_ = configure_axes->y_max;
+  y_max_ = configure_axes->y_max_;
 }
 
 void GraphPanel::clearClicked()
@@ -252,7 +259,8 @@ void GraphPanel::clearClicked()
     Q_EMIT startStopClicked();
   else
     graph_refresh_timer_->stop();
-  std::this_thread::sleep_for (std::chrono::milliseconds(16));
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(16));
   displayed_topics_.clear();
   plot_->legend->setVisible(false);
   plot_->clearPlottables();

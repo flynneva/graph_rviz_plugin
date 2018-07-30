@@ -344,11 +344,6 @@ void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
 
 void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
 {
-  //FIXME maybe be usefull
-  /*
-   QDateTime time;
-   time.setMSecsSinceEpoch(msg->data.sec * 1e3 + msg->data.nsec / 1e6);
-   */
   std::lock_guard<std::mutex> guard(data_mutex_);
   double tmp;
   tmp = (msg->data).toSec();
