@@ -31,6 +31,8 @@ AxesWindow::AxesWindow(bool rescale_auto, bool window_time_enable, double y_min,
   }
   else
   {
+    ROS_WARN_STREAM("Ymin" << y_min_);
+    ROS_ERROR_STREAM("Ymax" << y_max_);
     y_axis_autoscalle->setChecked(false);
     y_min_double_spin_box_->setEnabled(true);
     y_max_double_spin_box_->setEnabled(true);
@@ -116,7 +118,7 @@ void AxesWindow::xAxisWindowTime(bool checked)
 
 void AxesWindow::okClicked()
 {
-  if (rescale_auto_ == true)
+  if (rescale_auto_ == false)
   {
     y_min_ = y_min_double_spin_box_->value();
     y_max_ = y_max_double_spin_box_->value();

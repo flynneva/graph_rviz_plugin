@@ -271,9 +271,6 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
     ROS_ERROR_STREAM("Memory is full");
     topic_time_.clear();
   }
-
-  ROS_ERROR_STREAM("Refresh Data " << tmp);
-  ROS_ERROR_STREAM("Refresh time " << time);
   data_update_ = true;
   return;
 }

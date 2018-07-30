@@ -1,6 +1,8 @@
 #ifndef RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
 #define RVIZ_GRAPH_PLUGIN_CONFIGURE_AXES_HPP
 
+#include <ros/ros.h>
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -29,7 +31,6 @@ protected Q_SLOTS:
     void yAxisAutoscale(bool checked);
     void xAxisWindowTime(bool checked);
     void okClicked();
-    
     
 private:
   QDoubleSpinBox *y_min_double_spin_box_ ;
