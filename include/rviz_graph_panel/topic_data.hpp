@@ -25,6 +25,7 @@
 #include <QFuture>
 #include <QVector>
 #include <QObject>
+#include <QMessageBox>
 #include <deque>
 #include <exception>
 #include <mutex>
@@ -62,6 +63,16 @@ public:
 
 Q_SIGNALS:
   void vectorUpdated(std::string topic_name);
+  void displayMessageBox(const QString,
+                         const QString,
+                         const QString,
+                         const QMessageBox::Icon);
+
+protected Q_SLOTS:
+  void displayMessageBoxHandler(const QString title,
+                                const QString text,
+                                const QString info = "",
+                                const QMessageBox::Icon icon = QMessageBox::Icon::Information);
 
 private:
   ros::Subscriber sub_;
@@ -78,6 +89,7 @@ private:
   void uint16Callback(const std_msgs::UInt16ConstPtr &msg);
   void uint32Callback(const std_msgs::UInt32ConstPtr &msg);
   void uint64Callback(const std_msgs::UInt64ConstPtr &msg);
+  void pushData(const double Data, const ros::Time now);
   std::mutex data_mutex_;
 };
 

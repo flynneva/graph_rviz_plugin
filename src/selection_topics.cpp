@@ -9,7 +9,7 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
   already_displayed_topics_(already_displayed_topics),
   nh_(nh)
 {
-  setWindowTitle("Topics Selection");
+  setWindowTitle("Topics selection");
   QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
   setLayout(pick_topics_dialog);
   detectTopics();
@@ -37,6 +37,9 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
 
   connect(button_box, &QDialogButtonBox::accepted, this, &SelectionTopics::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
+          this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
+
 }
 
 SelectionTopics::~SelectionTopics()
@@ -68,39 +71,6 @@ void SelectionTopics::detectTopics()
         topic.datatype == "std_msgs/Float32" ||
         topic.datatype == "std_msgs/Float64")
       supported_topics_.push_back(topic);
-  }
-
-  // FIXME When no supported topics is found, the user can still continue selecting (zero) topics/
-  // The next QDialog should not be displayed after the error message.
-  // Maybe it's a better idea to use a Q_EMIT displayMessageBox and return
-  if (supported_topics_.empty())
-  {
-    QDialog *no_topics_dialog = new QDialog(this);
-    no_topics_dialog->setWindowTitle("No supported topic");
-    QVBoxLayout *layout = new QVBoxLayout;
-    no_topics_dialog->setLayout(layout);
-    layout->addWidget(
-      new QLabel("Error with topics, no supported topics found.\n"
-                 "- Ok will clear the topics displayed\n- Cancel will not change the displayed topics"));
-
-    QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
-        | QDialogButtonBox::Cancel);
-    no_topics_dialog->layout()->addWidget(button_box);
-
-    connect(button_box, &QDialogButtonBox::accepted, no_topics_dialog, &QDialog::accept);
-    connect(button_box, &QDialogButtonBox::rejected, no_topics_dialog, &QDialog::reject);
-
-    if (!no_topics_dialog->exec())
-    {
-      close();
-      return;
-    }
-    else
-    {
-      displayed_topics_.clear();
-      close();
-      return;
-    }
   }
 }
 
