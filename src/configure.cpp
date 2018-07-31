@@ -3,17 +3,10 @@
 namespace rviz_graph_plugin
 {
 
-Configure::Configure(QDialog *)
+Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):
+  displayed_topics_(displayed_topics)
 {
   setWindowTitle("Configure topics");
-}
-
-Configure::~Configure()
-{
-}
-
-void Configure::WindowConstruction()
-{
   QVBoxLayout *configure_layout = new QVBoxLayout;
   QHBoxLayout *form_layout = new QHBoxLayout;
   setLayout(configure_layout);
@@ -31,23 +24,17 @@ void Configure::WindowConstruction()
     color_selection_combobox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
     color_selection_combobox->addItems(color_list);
 
-    // FIXME If / else if / else
     if (displayed_topics_.at(i)->color_ == QColor(0, 0, 255)) //blue
       color_selection_combobox->setCurrentIndex(0);
-
-    if (displayed_topics_.at(i)->color_ == QColor(255, 0, 0)) //red
+    else if (displayed_topics_.at(i)->color_ == QColor(255, 0, 0)) //red
       color_selection_combobox->setCurrentIndex(1);
-
-    if (displayed_topics_.at(i)->color_ == QColor(0, 0, 0)) //black
+    else if (displayed_topics_.at(i)->color_ == QColor(0, 0, 0)) //black
       color_selection_combobox->setCurrentIndex(2);
-
-    if (displayed_topics_.at(i)->color_ == QColor(0, 255, 255)) //cyan
+    else if (displayed_topics_.at(i)->color_ == QColor(0, 255, 255)) //cyan
       color_selection_combobox->setCurrentIndex(3);
-
-    if (displayed_topics_.at(i)->color_ == QColor(255, 255, 0)) //yellow
+    else if (displayed_topics_.at(i)->color_ == QColor(255, 255, 0)) //yellow
       color_selection_combobox->setCurrentIndex(4);
-
-    if (displayed_topics_.at(i)->color_ == QColor(192, 192, 192)) //gray
+    else//gray
       color_selection_combobox->setCurrentIndex(5);
 
     topic_form->addRow("Color", color_selection_combobox);
@@ -78,6 +65,10 @@ void Configure::WindowConstruction()
 
   connect(button_box, &QDialogButtonBox::accepted, this, &Configure::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
+}
+
+Configure::~Configure()
+{
 }
 
 void Configure::okClicked()
@@ -115,25 +106,19 @@ void Configure::okClicked()
 
         if (index == 0) //blue
           displayed_topics_.at(i)->color_ = QColor(0, 0, 255);
-
-        if (index == 1) //red
+        else if (index == 1) //red
           displayed_topics_.at(i)->color_ = QColor(255, 0, 0);
-
-        if (index == 2) //black
+        else if (index == 2) //black
           displayed_topics_.at(i)->color_ = QColor(0, 0, 0);
-
-        if (index == 3) //cyan
+        else if (index == 3) //cyan
           displayed_topics_.at(i)->color_ = QColor(0, 255, 255);
-
-        if (index == 4) //yellow
+        else if (index == 4) //yellow
           displayed_topics_.at(i)->color_ = QColor(255, 255, 0);
-
-        if (index == 5) //gray
+        else //gray
           displayed_topics_.at(i)->color_ = QColor(192, 192, 192);
       }
     }
   }
-
   close();
   return;
 }

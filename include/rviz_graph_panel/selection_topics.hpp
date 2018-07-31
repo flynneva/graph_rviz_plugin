@@ -40,6 +40,7 @@ public:
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   std::deque<std::shared_ptr<TopicData>> already_displayed_topics_;
   std::shared_ptr<ros::NodeHandle> nh_;
+  ros::master::V_TopicInfo supported_topics_;
 
 Q_SIGNALS:
   void displayMessageBox(const QString,
@@ -55,7 +56,6 @@ protected Q_SLOTS:
   void okClicked();
 
 private:
-  ros::master::V_TopicInfo supported_topics_;
   std::vector<QCheckBox *> topic_buttons_;
 };
 

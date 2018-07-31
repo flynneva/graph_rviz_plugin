@@ -52,458 +52,109 @@ TopicData::~TopicData()
 {
 }
 
-// FIXME Write a function pushData(const double data, const ros::Time now) and use it everywhere
-// There is a lot of duplicated code right now
-
-// FIXME Inform the user when the memory is full!!!! Right now the data is cleared and that's it.
-// The main application will not stop the recording, the user won't get notified, this is bad.
-
 void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  {
-    if (msg->data == true)
-    {
-      try
-      {
-        topic_data_.push_back(1);
-      }
-      catch (const std::exception &e)
-      {
-        ROS_ERROR_STREAM("Memory is full");
-        topic_data_.clear();
-      }
-
-      double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-      try
-      {
-        topic_time_.push_back(time);
-      }
-      catch (const std::exception &e)
-      {
-        ROS_ERROR_STREAM("Memory is full");
-        topic_data_.clear();
-      }
-
-      data_update_ = true;
-      return;
-    }
-    else
-    {
-      try
-      {
-        topic_data_.push_back(1);
-      }
-      catch (const std::exception &e)
-      {
-        ROS_ERROR_STREAM("Memory is full");
-        topic_time_.clear();
-      }
-
-      double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-      try
-      {
-        topic_time_.push_back(time);
-      }
-      catch (const std::exception &e)
-      {
-        ROS_ERROR_STREAM("Memory is full");
-        topic_time_.clear();
-      }
-
-      data_update_ = true;
-      return;
-    }
-  }
-
+  const double data(msg->data);
+  pushData(data, ros::Time::now());
+  data_update_ = true;
 }
 
 void TopicData::durationCallback(const std_msgs::DurationConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (msg->data).toSec();
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (msg->data).toSec();
+  pushData(data, ros::Time::now());
   data_update_ = true ;
-  return;
 }
 
 void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (msg->data).toSec();
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  double data = (msg->data).toSec();
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
 
 void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double tmp;
-  tmp = (double)(msg->data);
-
-  try
-  {
-    topic_data_.push_back(tmp);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_data_.clear();
-  }
-
-  double time = (ros::Time::now()).toSec() - begin_.toSec();
-
-  try
-  {
-    topic_time_.push_back(time);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_ERROR_STREAM("Memory is full");
-    topic_time_.clear();
-  }
-
+  const double data = (double)(msg->data);
+  pushData(data, ros::Time::now());
   data_update_ = true;
-  return;
 }
-
 
 QVector<double> TopicData::getTopicData()
 {
@@ -517,4 +168,35 @@ QVector<double> TopicData::getTopicTime()
   return topic_time_;
 }
 
+void TopicData::pushData(const double data, const ros::Time now)
+{
+  double time = (now.toSec() - begin_.toSec());
+
+  try
+  {
+    topic_time_.push_back(time);
+    topic_data_.push_back(data);
+  }
+  catch (const std::exception &e)
+  {
+    ROS_WARN_STREAM("Memory full, acquisition stop");
+    Q_EMIT displayMessageBox("Fatal Error", "Memory is full, acquisition is stopped.", "",
+                             QMessageBox::Icon::Critical);
+    sub_.shutdown();
+  }
+}
+
+void TopicData::displayMessageBoxHandler(const QString title,
+    const QString message,
+    const QString info_msg,
+    const QMessageBox::Icon icon)
+{
+  QMessageBox msg_box;
+  msg_box.setWindowTitle(title);
+  msg_box.setText(message);
+  msg_box.setInformativeText(info_msg);
+  msg_box.setIcon(icon);
+  msg_box.setStandardButtons(QMessageBox::Ok);
+  msg_box.exec();
+}
 }

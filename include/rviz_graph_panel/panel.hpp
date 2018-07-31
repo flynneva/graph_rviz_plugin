@@ -26,7 +26,7 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/configure.hpp>
-#include <rviz_graph_panel/configure_axes.hpp>
+#include <rviz_graph_panel/configure_graph.hpp>
 #include <rviz_graph_panel/selection_topics.hpp>
 #include <rviz_graph_panel/topic_data.hpp>
 
@@ -59,7 +59,7 @@ protected Q_SLOTS:
   void startStopClicked();
   void topicsSelectionClicked();
   void configClicked();
-  void axesClicked();
+  void graphClicked();
   void clearClicked();
   void graphUpdate();
 
@@ -69,12 +69,13 @@ private:
   QTimer *graph_refresh_timer_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
-  std::atomic<bool> graph_running_;
+  std::atomic<bool> legend_enable_;
   std::atomic<bool> yaxis_rescale_auto_;
   std::atomic<bool> window_time_enable_;
   double y_min_ = 0;
   double y_max_ = 1;
   double w_time_ = 1;
+  double refresh_period_ms_ = 16; // in milliseconds
 };
 
 }
