@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <QPen>
 #include <QTimer>
 #include <atomic>
 #include <deque>
