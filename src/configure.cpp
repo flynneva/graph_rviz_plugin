@@ -10,7 +10,7 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
   QVBoxLayout *configure_layout = new QVBoxLayout;
   QHBoxLayout *form_layout = new QHBoxLayout;
   setLayout(configure_layout);
-  QStringList color_list = {"Blue", "Red", "Black", "Cyan", "Yellow", "Gray"};
+  QStringList color_list = {"Red", "Green", "Blue", "Cyan", "Magenta", "Yellow", "Black", "Gray"};
 
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -24,18 +24,22 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
     color_selection_combobox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
     color_selection_combobox->addItems(color_list);
 
-    if (displayed_topics_.at(i)->color_ == QColor(0, 0, 255)) //blue
+    if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::red)
       color_selection_combobox->setCurrentIndex(0);
-    else if (displayed_topics_.at(i)->color_ == QColor(255, 0, 0)) //red
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::green)
       color_selection_combobox->setCurrentIndex(1);
-    else if (displayed_topics_.at(i)->color_ == QColor(0, 0, 0)) //black
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::blue)
       color_selection_combobox->setCurrentIndex(2);
-    else if (displayed_topics_.at(i)->color_ == QColor(0, 255, 255)) //cyan
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkCyan)
       color_selection_combobox->setCurrentIndex(3);
-    else if (displayed_topics_.at(i)->color_ == QColor(255, 255, 0)) //yellow
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkMagenta)
       color_selection_combobox->setCurrentIndex(4);
-    else//gray
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkYellow)
       color_selection_combobox->setCurrentIndex(5);
+    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::black)
+      color_selection_combobox->setCurrentIndex(6);
+    else
+      color_selection_combobox->setCurrentIndex(7);
 
     topic_form->addRow("Color", color_selection_combobox);
 
@@ -102,23 +106,28 @@ void Configure::okClicked()
     {
       if ((displayed_topics_.at(i)->topic_name_) == combobox->objectName().toStdString())
       {
-        int index = combobox->currentIndex();
+        const int index = combobox->currentIndex();
 
-        if (index == 0) //blue
-          displayed_topics_.at(i)->color_ = QColor(0, 0, 255);
-        else if (index == 1) //red
-          displayed_topics_.at(i)->color_ = QColor(255, 0, 0);
-        else if (index == 2) //black
-          displayed_topics_.at(i)->color_ = QColor(0, 0, 0);
-        else if (index == 3) //cyan
-          displayed_topics_.at(i)->color_ = QColor(0, 255, 255);
-        else if (index == 4) //yellow
-          displayed_topics_.at(i)->color_ = QColor(255, 255, 0);
-        else //gray
-          displayed_topics_.at(i)->color_ = QColor(192, 192, 192);
+        if (index == 0)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::red;
+        else if (index == 1)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::green;
+        else if (index == 2)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::blue;
+        else if (index == 3)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkCyan;
+        else if (index == 4)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkMagenta;
+        else if (index == 5)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkYellow;
+        else if (index == 6)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::black;
+        else
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::gray;
       }
     }
   }
+
   close();
   return;
 }

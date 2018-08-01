@@ -41,7 +41,7 @@ public:
   std::shared_ptr<ros::NodeHandle> nh_;
   std::string topic_name_;
   std::string topic_type_;
-  QColor color_ = QColor(255, 0, 0);
+  QColor color_ = Qt::GlobalColor::black;
   unsigned thickness_ = 1;
   bool displayed_ = true;
   bool data_update_ = true;

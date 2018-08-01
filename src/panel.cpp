@@ -61,7 +61,7 @@ void GraphPanel::graphUpdate()
   QFont legendFont = font();
   legendFont.setPointSize(9);
   plot_->legend->setFont(legendFont);
-  plot_->legend->setBrush(QBrush(QColor(255, 255, 255, 230)));
+  plot_->legend->setBrush(QBrush(Qt::GlobalColor::white));
 
   if ((graph_refresh_timer_->isActive()) == false)
     return;
@@ -78,7 +78,7 @@ void GraphPanel::graphUpdate()
         plot_->addGraph();
         plot_->graph(i)->removeFromLegend();
         plot_->graph(i)->setName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
-        plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_,displayed_topics_.at(i)->thickness_));
+        plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_, displayed_topics_.at(i)->thickness_));
         plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
         plot_->graph(i)->setData(topic_time, topic_data);
         plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
@@ -86,7 +86,7 @@ void GraphPanel::graphUpdate()
         displayed_topics_.at(i)->graph_enable_ = true;
         plot_->graph(i)->addToLegend();
       }
-      
+
       if (yaxis_rescale_auto_ == true)
         plot_->yAxis->rescale(true);
       else
@@ -97,7 +97,7 @@ void GraphPanel::graphUpdate()
       else
         plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignCenter);
 
-      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_,displayed_topics_.at(i)->thickness_));
+      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_, displayed_topics_.at(i)->thickness_));
       plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
       plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
       plot_->graph(i)->setData(topic_time, topic_data);
@@ -129,6 +129,7 @@ void GraphPanel::load(const rviz::Config &config)
   rviz::Panel::load(config);
   {
     bool tmp;
+
     if (config.mapGetBool("window_time_enable", &tmp))
       window_time_enable_ = tmp;
 
@@ -141,6 +142,7 @@ void GraphPanel::load(const rviz::Config &config)
 
   {
     float tmp;
+
     if (config.mapGetFloat("w_time", &tmp))
       w_time_ = (double)tmp;
 
@@ -191,7 +193,7 @@ void GraphPanel::startStopClicked()
 void GraphPanel::topicsSelectionClicked()
 {
   SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_);
-  
+
   if (topic_window->supported_topics_.empty())
   {
     Q_EMIT displayMessageBox("No supported topic", "Error with topics, no supported topics found.", "",
@@ -207,20 +209,25 @@ void GraphPanel::topicsSelectionClicked()
 
   Q_EMIT clearClicked();
   displayed_topics_ = topic_window->displayed_topics_;
+
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
-    if(i%6 == 0)
-      displayed_topics_.at(i)->color_ = QColor(255, 0, 0); //red by default
-    else if(i%6 == 1)
-      displayed_topics_.at(i)->color_ = QColor(0, 0, 255); //blue
-    else if(i%6 == 2)
-      displayed_topics_.at(i)->color_ = QColor(0, 0, 0); //black
-    else if(i%6 == 3)
-      displayed_topics_.at(i)->color_ = QColor(0, 255, 255); //cyan
-    else if(i%6 == 4)
-      displayed_topics_.at(i)->color_ = QColor(255, 255, 0); //yellow
+    if (i % 6 == 0)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::red;
+    else if (i % 6 == 1)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::green;
+    else if (i % 6 == 2)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::blue;
+    else if (i % 6 == 3)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkCyan;
+    else if (i % 6 == 4)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkMagenta;
+    else if (i % 6 == 5)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkYellow;
+    else if (i % 6 == 6)
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::black;
     else
-      displayed_topics_.at(i)->color_ = QColor(192, 192, 192); //gray
+      displayed_topics_.at(i)->color_ = Qt::GlobalColor::gray;
   }
 }
 
@@ -261,18 +268,23 @@ void GraphPanel::configClicked()
       if ((displayed_topics_.at(i)->topic_name_) == combobox->objectName().toStdString())
       {
         int index = combobox->currentIndex();
-        if (index == 0) //blue
-          displayed_topics_.at(i)->color_ = QColor(0, 0, 255);
-        else if (index == 1) //red
-          displayed_topics_.at(i)->color_ = QColor(255, 0, 0);
-        else if (index == 2) //black
-          displayed_topics_.at(i)->color_ = QColor(0, 0, 0);
-        else if (index == 3) //cyan
-          displayed_topics_.at(i)->color_ = QColor(0, 255, 255);
-        else if (index == 4) //yellow
-          displayed_topics_.at(i)->color_ = QColor(255, 255, 0);
-        else //gray
-          displayed_topics_.at(i)->color_ = QColor(192, 192, 192);
+
+        if (index == 0)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::red;
+        else if (index == 1)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::green;
+        else if (index == 2)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::blue;
+        else if (index == 3)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkCyan;
+        else if (index == 4)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkMagenta;
+        else if (index == 5)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkYellow;
+        else if (index == 6)
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::black;
+        else
+          displayed_topics_.at(i)->color_ = Qt::GlobalColor::gray;
       }
     }
   }
@@ -283,7 +295,7 @@ void GraphPanel::configClicked()
 void GraphPanel::graphClicked()
 {
   ConfigureGraph *configure_graph = new ConfigureGraph(yaxis_rescale_auto_, window_time_enable_, legend_enable_,  y_min_, y_max_, w_time_, refresh_period_ms_);
-  
+
   if (!(configure_graph->exec()))
     return;
 
