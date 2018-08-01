@@ -10,8 +10,15 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
   nh_(nh)
 {
   setWindowTitle("Topics selection");
-  QVBoxLayout *pick_topics_dialog = new QVBoxLayout;
-  setLayout(pick_topics_dialog);
+  QVBoxLayout *main_layout = new QVBoxLayout;
+  setLayout(main_layout);
+  QVBoxLayout *scroll_widget_layout = new QVBoxLayout;
+  QWidget *scroll_widget = new QWidget;
+  scroll_widget->setLayout(scroll_widget_layout);
+  QScrollArea *scroll_area = new QScrollArea;
+  scroll_area->setWidget(scroll_widget);
+  scroll_area->setWidgetResizable(true);
+  scroll_area->setFrameShape(QFrame::NoFrame);
   detectTopics();
 
   for (auto topic : supported_topics_)
@@ -28,12 +35,12 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
         radio_button->setChecked(true);
     }
 
-    pick_topics_dialog->addWidget(radio_button);
+    scroll_widget_layout->addWidget(radio_button);
   }
-
+  main_layout->addWidget(scroll_area);
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
       | QDialogButtonBox::Cancel);
-  pick_topics_dialog->addWidget(button_box);
+  main_layout->addWidget(button_box);
 
   connect(button_box, &QDialogButtonBox::accepted, this, &SelectionTopics::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
