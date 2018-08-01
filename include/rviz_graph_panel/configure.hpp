@@ -1,7 +1,6 @@
 #ifndef RVIZ_GRAPH_PANEL_CONFIGURE_HPP
 #define RVIZ_GRAPH_PANEL_CONFIGURE_HPP
 
-#include <rviz_graph_panel/topic_data.hpp>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QColor>
@@ -10,6 +9,7 @@
 #include <QSpinBox>
 #include <QStringList>
 #include <deque>
+#include <rviz_graph_panel/topic_data.hpp>
 
 namespace rviz_graph_plugin
 {

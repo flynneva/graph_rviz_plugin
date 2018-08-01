@@ -2,15 +2,14 @@
 #define RVIZ_GRAPH_PANEL_CONFIGURE_GRAPH_HPP
 
 #include <QCheckBox>
-#include <QDialog>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QGroupBox>
-#include <QRadioButton>
-#include <QFormLayout>
-#include <QDoubleSpinBox>
 #include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QVBoxLayout>
 
 namespace rviz_graph_plugin
 {
