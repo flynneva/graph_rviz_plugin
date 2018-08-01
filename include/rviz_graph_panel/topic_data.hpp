@@ -52,7 +52,6 @@ public:
   bool displayed_ = true;
   bool data_update_ = true;
   bool graph_enable_ = false;
-  int graph_number_ = -1;
   QCPGraph::LineStyle line_style_ = QCPGraph::lsLine;
   QCPScatterStyle::ScatterShape scatter_shape_ = QCPScatterStyle::ssCross;
   ros::Time begin_;
