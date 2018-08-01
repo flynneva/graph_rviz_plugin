@@ -19,6 +19,7 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <QScrollArea>
 #include <deque>
 #include <mutex>
 #include <rviz_graph_panel/qcustomplot.h>
