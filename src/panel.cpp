@@ -78,7 +78,7 @@ void GraphPanel::graphUpdate()
         plot_->addGraph();
         plot_->graph(i)->removeFromLegend();
         plot_->graph(i)->setName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
-        plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_));
+        plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_,displayed_topics_.at(i)->thickness_));
         plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
         plot_->graph(i)->setData(topic_time, topic_data);
         plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
@@ -97,7 +97,7 @@ void GraphPanel::graphUpdate()
       else
         plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignCenter);
 
-      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_));
+      plot_->graph(i)->setPen(QPen(displayed_topics_.at(i)->color_,displayed_topics_.at(i)->thickness_));
       plot_->graph(i)->setLineStyle(displayed_topics_.at(i)->line_style_);
       plot_->graph(i)->setVisible(displayed_topics_.at(i)->displayed_);
       plot_->graph(i)->setData(topic_time, topic_data);
