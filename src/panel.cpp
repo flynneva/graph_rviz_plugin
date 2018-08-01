@@ -207,6 +207,21 @@ void GraphPanel::topicsSelectionClicked()
 
   Q_EMIT clearClicked();
   displayed_topics_ = topic_window->displayed_topics_;
+  for (unsigned i = 0; i < displayed_topics_.size(); i++)
+  {
+    if(i%6 == 0)
+      displayed_topics_.at(i)->color_ = QColor(255, 0, 0); //red by default
+    else if(i%6 == 1)
+      displayed_topics_.at(i)->color_ = QColor(0, 0, 255); //blue
+    else if(i%6 == 2)
+      displayed_topics_.at(i)->color_ = QColor(0, 0, 0); //black
+    else if(i%6 == 3)
+      displayed_topics_.at(i)->color_ = QColor(0, 255, 255); //cyan
+    else if(i%6 == 4)
+      displayed_topics_.at(i)->color_ = QColor(255, 255, 0); //yellow
+    else
+      displayed_topics_.at(i)->color_ = QColor(192, 192, 192); //gray
+  }
 }
 
 void GraphPanel::configClicked()
