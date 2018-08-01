@@ -1,28 +1,16 @@
 #ifndef RVIZ_GRAPH_PANEL_SELECTION_TOPICS_HPP
 #define RVIZ_GRAPH_PANEL_SELECTION_TOPICS_HPP
 
-#ifndef Q_MOC_RUN
-#include <ros/ros.h>
-#include <ros/time.h>
-#include <ros/service.h>
-#include <rviz/panel.h>
-#endif
-
+#include <deque>
+#include <mutex>
 #include <QCheckBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QFuture>
 #include <QLabel>
 #include <QMessageBox>
-#include <QPen>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QVBoxLayout>
 #include <QScrollArea>
-#include <deque>
-#include <mutex>
-#include <rviz_graph_panel/qcustomplot.h>
+#include <QVBoxLayout>
+#include <ros/ros.h>
 #include <rviz_graph_panel/topic_data.hpp>
 
 namespace rviz_graph_plugin

@@ -1,35 +1,29 @@
 #ifndef RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
 #define RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
 
-#ifndef Q_MOC_RUN
-#include <ros/ros.h>
-#include <ros/time.h>
-#include <ros/service.h>
-#include <rviz/panel.h>
-#include <std_msgs/Bool.h>
-#include <std_msgs/Duration.h>
-#include <std_msgs/Int8.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Int64.h>
-#include <std_msgs/Time.h>
-#include <std_msgs/UInt8.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/UInt32.h>
-#include <std_msgs/UInt64.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-#endif
-
-#include <QFuture>
-#include <QVector>
-#include <QObject>
-#include <QMessageBox>
 #include <deque>
 #include <exception>
 #include <mutex>
+#include <QMessageBox>
+#include <QObject>
+#include <QVector>
+#include <ros/ros.h>
+#include <ros/time.h>
 #include <rviz_graph_panel/qcustomplot.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Duration.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Int16.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Int64.h>
+#include <std_msgs/Int8.h>
+#include <std_msgs/String.h>
+#include <std_msgs/Time.h>
+#include <std_msgs/UInt16.h>
+#include <std_msgs/UInt32.h>
+#include <std_msgs/UInt64.h>
+#include <std_msgs/UInt8.h>
 
 namespace rviz_graph_plugin
 {

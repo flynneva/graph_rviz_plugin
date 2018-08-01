@@ -1,35 +1,26 @@
 #ifndef RVIZ_GRAPH_PANEL_PANEL_HPP
 #define RVIZ_GRAPH_PANEL_PANEL_HPP
 
-#ifndef Q_MOC_RUN
-#include <ros/ros.h>
-#include <ros/service.h>
-#include <rviz/panel.h>
-#include <ros/time.h>
-#endif
-
-#include <QFuture>
-#include <QLabel>
-#include <QMessageBox>
-#include <QPen>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QVBoxLayout>
-#include <QPen>
-#include <QTimer>
 #include <atomic>
+#include <chrono>
 #include <deque>
 #include <memory>
-#include <thread>
-#include <chrono>
 #include <mutex>
-#include <thread>
-#include <QtConcurrent/QtConcurrentRun>
-#include <rviz_graph_panel/qcustomplot.h>
-#include <rviz_graph_panel/configure.hpp>
+#include <QLabel>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTimer>
+#include <QVBoxLayout>
+#include <ros/ros.h>
+#include <ros/service.h>
+#include <ros/time.h>
 #include <rviz_graph_panel/configure_graph.hpp>
+#include <rviz_graph_panel/configure.hpp>
+#include <rviz_graph_panel/qcustomplot.h>
 #include <rviz_graph_panel/selection_topics.hpp>
 #include <rviz_graph_panel/topic_data.hpp>
+#include <rviz/panel.h>
+#include <thread>
 
 namespace rviz_graph_plugin
 {
