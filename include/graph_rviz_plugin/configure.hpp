@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_CONFIGURE_HPP
-#define RVIZ_GRAPH_PANEL_CONFIGURE_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_CONFIGURE_HPP
+#define GRAPH_RVIZ_PLUGIN_CONFIGURE_HPP
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -10,9 +10,9 @@
 #include <QStringList>
 #include <QTableWidget>
 #include <deque>
-#include <rviz_graph_panel/topic_data.hpp>
+#include <graph_rviz_plugin/topic_data.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 class Configure : public QDialog

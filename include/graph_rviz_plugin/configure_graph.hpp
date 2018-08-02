@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_CONFIGURE_GRAPH_HPP
-#define RVIZ_GRAPH_PANEL_CONFIGURE_GRAPH_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_CONFIGURE_GRAPH_HPP
+#define GRAPH_RVIZ_PLUGIN_CONFIGURE_GRAPH_HPP
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -11,7 +11,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 class ConfigureGraph : public QDialog

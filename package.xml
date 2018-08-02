@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>rviz_graph_panel</name>
+  <name>graph_rviz_plugin</name>
   <version>0.0.1</version>
   <description>RViz graph plugin</description>
 

@@ -1,6 +1,6 @@
-#include <rviz_graph_panel/topic_data.hpp>
+#include <graph_rviz_plugin/topic_data.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 TopicData::TopicData(std::string topic_name,

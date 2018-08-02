@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_PANEL_HPP
-#define RVIZ_GRAPH_PANEL_PANEL_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_PANEL_HPP
+#define GRAPH_RVIZ_PLUGIN_PANEL_HPP
 
 #include <atomic>
 #include <chrono>
@@ -14,15 +14,15 @@
 #include <ros/ros.h>
 #include <ros/service.h>
 #include <ros/time.h>
-#include <rviz_graph_panel/configure_graph.hpp>
-#include <rviz_graph_panel/configure.hpp>
-#include <rviz_graph_panel/qcustomplot.h>
-#include <rviz_graph_panel/selection_topics.hpp>
-#include <rviz_graph_panel/topic_data.hpp>
+#include <graph_rviz_plugin/configure_graph.hpp>
+#include <graph_rviz_plugin/configure.hpp>
+#include <graph_rviz_plugin/qcustomplot.h>
+#include <graph_rviz_plugin/selection_topics.hpp>
+#include <graph_rviz_plugin/topic_data.hpp>
 #include <rviz/panel.h>
 #include <thread>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 class GraphPanel : public rviz::Panel

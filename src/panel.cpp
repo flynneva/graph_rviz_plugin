@@ -1,6 +1,6 @@
-#include <rviz_graph_panel/panel.hpp>
+#include <graph_rviz_plugin/panel.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 GraphPanel::GraphPanel(QWidget *parent) :
@@ -324,5 +324,5 @@ void GraphPanel::clearClicked()
 
 }
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(rviz_graph_plugin::GraphPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(graph_rviz_plugin::GraphPanel, rviz::Panel)
 
