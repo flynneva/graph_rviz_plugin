@@ -8,6 +8,7 @@
 #include <QFormLayout>
 #include <QSpinBox>
 #include <QStringList>
+#include <QTableWidget>
 #include <deque>
 #include <rviz_graph_panel/topic_data.hpp>
 
