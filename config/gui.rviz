@@ -11,7 +11,7 @@ Panels:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
-  - Class: rviz_graph_plugin/GraphPanel
+  - Class: graph_rviz_plugin/GraphPanel
     Name: GraphPanel
 Preferences:
   PromptSaveOnExit: true

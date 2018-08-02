@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_SELECTION_TOPICS_HPP
-#define RVIZ_GRAPH_PANEL_SELECTION_TOPICS_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_SELECTION_TOPICS_HPP
+#define GRAPH_RVIZ_PLUGIN_SELECTION_TOPICS_HPP
 
 #include <deque>
 #include <mutex>
@@ -11,9 +11,9 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <ros/ros.h>
-#include <rviz_graph_panel/topic_data.hpp>
+#include <graph_rviz_plugin/topic_data.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 class SelectionTopics : public QDialog

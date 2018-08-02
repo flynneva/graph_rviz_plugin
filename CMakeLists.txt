@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rviz_graph_panel)
+project(graph_rviz_plugin)
 add_compile_options(-std=c++11 -Wall -Wextra)
 
 ## Find catkin macros and libraries

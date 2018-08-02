@@ -1,5 +1,5 @@
-#ifndef RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
-#define RVIZ_GRAPH_PANEL_TOPIC_DATA_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_TOPIC_DATA_HPP
+#define GRAPH_RVIZ_PLUGIN_TOPIC_DATA_HPP
 
 #include <deque>
 #include <exception>
@@ -9,7 +9,7 @@
 #include <QVector>
 #include <ros/ros.h>
 #include <ros/time.h>
-#include <rviz_graph_panel/qcustomplot.h>
+#include <graph_rviz_plugin/qcustomplot.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Duration.h>
 #include <std_msgs/Float32.h>
@@ -25,7 +25,7 @@
 #include <std_msgs/UInt64.h>
 #include <std_msgs/UInt8.h>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 class TopicData : public QObject

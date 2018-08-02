@@ -1,6 +1,6 @@
-#include <rviz_graph_panel/configure.hpp>
+#include <graph_rviz_plugin/configure.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):

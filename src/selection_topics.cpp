@@ -1,6 +1,6 @@
-#include <rviz_graph_panel/selection_topics.hpp>
+#include <graph_rviz_plugin/selection_topics.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,

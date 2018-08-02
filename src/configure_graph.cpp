@@ -1,6 +1,6 @@
-#include <rviz_graph_panel/configure_graph.hpp>
+#include <graph_rviz_plugin/configure_graph.hpp>
 
-namespace rviz_graph_plugin
+namespace graph_rviz_plugin
 {
 
 ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max, double w_time , double refresh_period, QDialog *):
