@@ -8,17 +8,35 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
 {
   setWindowTitle("Configure topics");
   QVBoxLayout *configure_layout = new QVBoxLayout;
-  QHBoxLayout *form_layout = new QHBoxLayout;
   setLayout(configure_layout);
   QStringList color_list = {"Red", "Green", "Blue", "Cyan", "Magenta", "Yellow", "Black", "Gray"};
+  QTableWidget *main_table = new QTableWidget;
+  main_table->setColumnCount(3);
+  QStringList horiz_header_names = {"Display", "Color", "Thickness"};
+  main_table->setHorizontalHeaderLabels(horiz_header_names);
+  main_table->setRowCount(displayed_topics_.size());
 
-  for (unsigned i = 0; i < displayed_topics_.size(); i++)
+  QStringList vertical_header_names;
+
+  for (auto topic : displayed_topics_)
+    vertical_header_names.push_back(QString::fromStdString(topic->topic_name_));
+
+  main_table->setVerticalHeaderLabels(vertical_header_names);
+
+  for (unsigned i(0); i < displayed_topics_.size(); ++i)
   {
-    QFormLayout *topic_form = new QFormLayout;
-    QLabel *topic_name_label = new QLabel;
-    topic_name_label->setText(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
-    topic_form->addRow("Name", topic_name_label);
+    // Display
+    QCheckBox *topic_checkbox = new QCheckBox;
+    topic_buttons_.push_back(topic_checkbox);
+    topic_checkbox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
+    topic_checkbox->setChecked(true);
 
+    if (displayed_topics_.at(i)->displayed_ == false)
+      topic_checkbox->setChecked(false);
+
+    main_table->setCellWidget(i, 0, topic_checkbox);
+
+    // Color
     QComboBox *color_selection_combobox = new QComboBox;
     topic_combobox_.push_back(color_selection_combobox);
     color_selection_combobox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
@@ -41,28 +59,21 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
     else
       color_selection_combobox->setCurrentIndex(7);
 
-    topic_form->addRow("Color", color_selection_combobox);
+    main_table->setCellWidget(i, 1, color_selection_combobox);
 
+    // Thickness
     QSpinBox *thickness_spin_box = new QSpinBox;
     topic_spinbox_.push_back(thickness_spin_box);
     thickness_spin_box->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
     thickness_spin_box->setRange(1, 10);
     thickness_spin_box->setValue(displayed_topics_.at(i)->thickness_);
-    topic_form->addRow("Thickness", thickness_spin_box);
-
-    QCheckBox *topic_checkbox = new QCheckBox;
-    topic_buttons_.push_back(topic_checkbox);
-    topic_checkbox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
-    topic_checkbox->setChecked(true);
-
-    if (displayed_topics_.at(i)->displayed_ == false)
-      topic_checkbox->setChecked(false);
-
-    topic_form->addRow("Display", topic_checkbox);
-    form_layout->addLayout(topic_form);
+    main_table->setCellWidget(i, 2, thickness_spin_box);
   }
 
-  configure_layout->addLayout(form_layout);
+  main_table->resizeColumnsToContents();
+  main_table->resizeRowsToContents();
+
+  configure_layout->addWidget(main_table);
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
       | QDialogButtonBox::Cancel);
   configure_layout->addWidget(button_box);
