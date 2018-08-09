@@ -1,5 +1,5 @@
-#ifndef GRAPH_RVIZ_PLUGIN_CONFIGURE_HPP
-#define GRAPH_RVIZ_PLUGIN_CONFIGURE_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_GRAPH_SETTINGS_HPP
+#define GRAPH_RVIZ_PLUGIN_GRAPH_SETTINGS_HPP
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -16,13 +16,13 @@
 namespace graph_rviz_plugin
 {
 
-class Configure : public QDialog
+class GraphSettings : public QDialog
 {
   Q_OBJECT
 
 public:
-  Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *parent = 0);
-  ~Configure();
+  GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *parent = 0);
+  ~GraphSettings();
 
 protected Q_SLOTS:
   void okClicked();

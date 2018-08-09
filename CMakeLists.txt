@@ -24,10 +24,10 @@ set(
 set(
   PROJECT_TARGETS
   ${PROJECT_QT_PANELS_TARGETS}
-  ${PROJECT_NAME}_configure
-  ${PROJECT_NAME}_configure_graph
+  ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_settings
   ${PROJECT_NAME}_topic_color
   ${PROJECT_NAME}_topics_data
 )
@@ -37,7 +37,7 @@ set(
 ################################################
 
 ################################################
-## Declare ROS dynamic reconfigure parameters ##
+## Declare ROS dynamic regraph_settings parameters ##
 ################################################
 
 ###################################
@@ -139,47 +139,47 @@ add_dependencies(
   ${catkin_EXPORTED_TARGETS}
 )
 
-## ConfigureTopics
+## Graph settings
 qt5_wrap_cpp(
-  configure_MOCS
-  include/${PROJECT_NAME}/configure.hpp
+  graph_settings_MOCS
+  include/${PROJECT_NAME}/graph_settings.hpp
 )
 add_library(
-  ${PROJECT_NAME}_configure
-  ${configure_MOCS}
-  src/configure.cpp
+  ${PROJECT_NAME}_graph_settings
+  ${graph_settings_MOCS}
+  src/graph_settings.cpp
 )
 target_link_libraries(
-  ${PROJECT_NAME}_configure
+  ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   Qt5::Widgets
   Qt5::Gui
 )
 add_dependencies(
-  ${PROJECT_NAME}_configure
+  ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   ${catkin_EXPORTED_TARGETS}
 )
 
-## ConfigureGraph
+## Settings
 qt5_wrap_cpp(
-  configure_graph_MOCS
-  include/${PROJECT_NAME}/configure_graph.hpp
+  settings_MOCS
+  include/${PROJECT_NAME}/settings.hpp
 )
 add_library(
-  ${PROJECT_NAME}_configure_graph
-  ${configure_graph_MOCS}
-  src/configure_graph.cpp
+  ${PROJECT_NAME}_settings
+  ${settings_MOCS}
+  src/settings.cpp
 )
 target_link_libraries(
-  ${PROJECT_NAME}_configure_graph
+  ${PROJECT_NAME}_settings
   Qt5::Widgets
   Qt5::Gui
 )
 add_dependencies(
-  ${PROJECT_NAME}_configure_graph
+  ${PROJECT_NAME}_settings
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -195,10 +195,10 @@ add_library(
 )
 target_link_libraries(
   ${PROJECT_NAME}
-  ${PROJECT_NAME}_configure_graph
-  ${PROJECT_NAME}_configure
+  ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_settings
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   Qt5::Widgets
@@ -207,10 +207,10 @@ target_link_libraries(
 )
 add_dependencies(
   ${PROJECT_NAME}
-  ${PROJECT_NAME}_configure
-  ${PROJECT_NAME}_configure_graph
+  ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_settings
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   ${catkin_EXPORTED_TARGETS}

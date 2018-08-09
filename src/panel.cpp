@@ -384,7 +384,7 @@ void GraphPanel::topicsSelectionClicked()
 
 void GraphPanel::graphSettingsClicked()
 {
-  Configure *configure_topics = new Configure(displayed_topics_);
+  GraphSettings *configure_topics = new GraphSettings(displayed_topics_);
 
   if (configure_topics->exec())
     graphSettingsUpdate();
@@ -392,7 +392,7 @@ void GraphPanel::graphSettingsClicked()
 
 void GraphPanel::settingsClicked()
 {
-  ConfigureGraph *configure_graph = new ConfigureGraph(yaxis_rescale_auto_, window_time_enable_,
+  Settings *configure_graph = new Settings(yaxis_rescale_auto_, window_time_enable_,
       legend_enable_,  y_min_, y_max_, w_time_, refresh_freq_);
 
   if (!configure_graph->exec())
