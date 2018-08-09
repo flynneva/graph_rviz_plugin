@@ -10,6 +10,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   topic_button_(new QPushButton("Topics")),
   stop_button_(new QPushButton("Stop")),
   graph_settings_button_(new QPushButton("Graph settings")),
+  export_button_(new QPushButton("Export")),
   graph_refresh_timer_(new QTimer(this)),
   plot_(new QCustomPlot)
 {
@@ -34,6 +35,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   connect(graph_settings_button_, SIGNAL(clicked()), SLOT(graphSettingsClicked()));
   QPushButton *settings_button = new QPushButton("Settings");
   connect(settings_button, SIGNAL(clicked()), SLOT(settingsClicked()));
+  connect(export_button_, SIGNAL(clicked()), SLOT(exportClicked()));
   QPushButton *reset_button = new QPushButton("Reset");
   connect(reset_button, SIGNAL(clicked()), SLOT(resetClicked()));
 
@@ -46,6 +48,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   button_layout->addWidget(topic_button_);
   button_layout->addWidget(graph_settings_button_);
   button_layout->addWidget(settings_button);
+  button_layout->addWidget(export_button_);
   button_layout->addStretch(1);
   button_layout->addWidget(reset_button);
 
@@ -64,6 +67,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   start_pause_button_->setEnabled(false);
   stop_button_->setEnabled(false);
   graph_settings_button_->setEnabled(false);
+  export_button_->setEnabled(false);
 }
 
 GraphPanel::~GraphPanel()
@@ -171,8 +175,16 @@ void GraphPanel::load(const rviz::Config &config)
 
   {
     int tmp;
+
     if (config.mapGetInt("refresh_freq", &tmp))
       refresh_freq_ = std::abs(tmp);
+  }
+
+  {
+    QString tmp;
+
+    if (config.mapGetString("export_directory", &tmp))
+      export_directory_ = tmp;
   }
 
   while (1)
@@ -222,6 +234,7 @@ void GraphPanel::save(rviz::Config config) const
   config.mapSetValue("y_min", y_min_);
   config.mapSetValue("y_max", y_max_);
   config.mapSetValue("refresh_freq", refresh_freq_);
+  config.mapSetValue("export_directory", export_directory_);
 
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -242,6 +255,7 @@ void GraphPanel::startPauseClicked()
     plot_->setInteraction(QCP::iRangeDrag, false);
     topic_button_->setEnabled(false);
     stop_button_->setEnabled(true);
+    export_button_->setEnabled(false);
 
     if (graph_stopped_ == true)
     {
@@ -269,6 +283,7 @@ void GraphPanel::startPauseClicked()
     graph_refresh_timer_->stop();
     start_pause_button_->setText("Start");
     plot_->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+    export_button_->setEnabled(true);
     return;
   }
 }
@@ -307,6 +322,27 @@ void GraphPanel::resetClicked()
   stop_button_->setEnabled(false);
   graph_settings_button_->setEnabled(false);
   topic_button_->setEnabled(true);
+
+  Q_EMIT configChanged();
+}
+
+void GraphPanel::exportClicked()
+{
+  QString file_name = QFileDialog::getSaveFileName(this, tr("Save file"), export_directory_ + "/graph.png", tr("PNG (*.png);; JPG (*.jpg) ;; PDF (*.pdf)"));
+
+  if (file_name.isEmpty())
+    return;
+
+  QFileInfo path = QFile(file_name);
+
+  if (path.completeSuffix() == "png")
+    plot_->savePng(file_name);
+  else if (path.completeSuffix() == "jpg")
+    plot_->saveJpg(file_name);
+  else
+    plot_->savePdf(file_name);
+
+  export_directory_ = path.absolutePath();
 
   Q_EMIT configChanged();
 }
