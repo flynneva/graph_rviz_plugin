@@ -41,9 +41,11 @@ GraphPanel::GraphPanel(QWidget *parent) :
   QHBoxLayout *button_layout = new QHBoxLayout();
   button_layout->addWidget(start_pause_button_);
   button_layout->addWidget(stop_button_);
+  button_layout->addStretch(1);
   button_layout->addWidget(topic_button_);
   button_layout->addWidget(graph_settings_button_);
   button_layout->addWidget(settings_button);
+  button_layout->addStretch(1);
   button_layout->addWidget(reset_button);
 
   QVBoxLayout *layout = new QVBoxLayout();
