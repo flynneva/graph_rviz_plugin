@@ -5,11 +5,11 @@ namespace graph_rviz_plugin
 
 ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
                                legend_enable, double y_min, double y_max, double w_time , double
-                               refresh_period, QDialog *):
+                               refresh_freq, QDialog *):
   y_min_(y_min),
   y_max_(y_max),
   w_time_(w_time),
-  refresh_period_(refresh_period),
+  refresh_freq_(refresh_freq),
   scale_auto_(scale_auto),
   window_time_enable_(window_time_enable),
   legend_enable_(legend_enable),
@@ -27,19 +27,27 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
   QVBoxLayout *general_layout = new QVBoxLayout;
   QLabel *title_combo_box = new QLabel("Refresh frequency");
   general_layout->addWidget(title_combo_box);
-  QStringList frequency_list = {"20Hz", "40Hz", "60Hz", "80Hz", "100Hz"};
+  QStringList frequency_list = {"1 Hz", "2 Hz", "5 Hz", "10 Hz", "20 Hz", "40Hz", "60Hz", "100Hz"};
   refresh_frequency_spin_box_->addItems(frequency_list);
 
-  if (refresh_period_ == 50)
+  if (refresh_freq_ == 1)
     refresh_frequency_spin_box_->setCurrentIndex(0);
-  else if (refresh_period_ == 25)
+  else if (refresh_freq_ == 2)
     refresh_frequency_spin_box_->setCurrentIndex(1);
-  else if (refresh_period_ == 16)
+  else if (refresh_freq_ == 5)
     refresh_frequency_spin_box_->setCurrentIndex(2);
-  else if (refresh_period_ == 12.5)
+  else if (refresh_freq_ == 10)
     refresh_frequency_spin_box_->setCurrentIndex(3);
-  else
+  else if (refresh_freq_ == 20)
     refresh_frequency_spin_box_->setCurrentIndex(4);
+  else if (refresh_freq_ == 40)
+    refresh_frequency_spin_box_->setCurrentIndex(5);
+  else if (refresh_freq_ == 60)
+    refresh_frequency_spin_box_->setCurrentIndex(6);
+  else if (refresh_freq_ == 100)
+    refresh_frequency_spin_box_->setCurrentIndex(7);
+  else
+    refresh_frequency_spin_box_->setCurrentIndex(5); // 40 Hz by default
 
   general_layout->addWidget(refresh_frequency_spin_box_);
   general_layout->addWidget(legend_enable_button_);
@@ -184,15 +192,23 @@ void ConfigureGraph::okClicked()
   legend_enable_ = legend_enable_button_->isChecked();
 
   if (refresh_frequency_spin_box_->currentIndex() == 0)
-    refresh_period_ = 0.05;
+    refresh_freq_ = 1;
   else if (refresh_frequency_spin_box_->currentIndex() == 1)
-    refresh_period_ = 0.025;
+    refresh_freq_ = 2;
   else if (refresh_frequency_spin_box_->currentIndex() == 2)
-    refresh_period_ = 0.016;
+    refresh_freq_ = 5;
   else if (refresh_frequency_spin_box_->currentIndex() == 3)
-    refresh_period_ = 0.0125;
+    refresh_freq_ = 10;
+  else if (refresh_frequency_spin_box_->currentIndex() == 4)
+    refresh_freq_ = 20;
+  else if (refresh_frequency_spin_box_->currentIndex() == 5)
+    refresh_freq_ = 40;
+  else if (refresh_frequency_spin_box_->currentIndex() == 6)
+    refresh_freq_ = 60;
+  else if (refresh_frequency_spin_box_->currentIndex() == 7)
+    refresh_freq_ = 100;
   else
-    refresh_period_ = 0.01;
+    refresh_freq_ = 40;
 
   accept();
 }

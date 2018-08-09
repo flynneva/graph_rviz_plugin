@@ -22,6 +22,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   legend_enable_ = true;
   graph_stopped_ = true;
   y_max_ = 10;
+  refresh_freq_ = 40;
 
   qRegisterMetaType<QMessageBox::Icon>();
   connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
@@ -166,9 +167,12 @@ void GraphPanel::load(const rviz::Config &config)
 
     if (config.mapGetFloat("y_max", &tmp))
       y_max_ = (double)tmp;
+  }
 
-    if (config.mapGetFloat("refresh_period_", &tmp))
-      refresh_period_ms_ = (double)tmp;
+  {
+    int tmp;
+    if (config.mapGetInt("refresh_freq", &tmp))
+      refresh_freq_ = std::abs(tmp);
   }
 
   while (1)
@@ -217,7 +221,7 @@ void GraphPanel::save(rviz::Config config) const
   config.mapSetValue("w_time", w_time_);
   config.mapSetValue("y_min", y_min_);
   config.mapSetValue("y_max", y_max_);
-  config.mapSetValue("refresh_period", refresh_period_ms_);
+  config.mapSetValue("refresh_freq", refresh_freq_);
 
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -232,7 +236,7 @@ void GraphPanel::startPauseClicked()
 {
   if ((graph_refresh_timer_->isActive()) == false)
   {
-    graph_refresh_timer_->start(refresh_period_ms_);
+    graph_refresh_timer_->start((1.0 / refresh_freq_) * 1000.0); // Hz > seconds > milliseconds
     start_pause_button_->setText("Pause");
     plot_->setInteraction(QCP::iRangeZoom, false);
     plot_->setInteraction(QCP::iRangeDrag, false);
@@ -353,7 +357,7 @@ void GraphPanel::graphSettingsClicked()
 void GraphPanel::settingsClicked()
 {
   ConfigureGraph *configure_graph = new ConfigureGraph(yaxis_rescale_auto_, window_time_enable_,
-      legend_enable_,  y_min_, y_max_, w_time_, refresh_period_ms_);
+      legend_enable_,  y_min_, y_max_, w_time_, refresh_freq_);
 
   if (!configure_graph->exec())
     return;
@@ -365,8 +369,15 @@ void GraphPanel::settingsClicked()
   y_max_ = configure_graph->y_max_;
   legend_enable_ = configure_graph->legend_enable_;
   Q_EMIT enableLegend(legend_enable_);
-  refresh_period_ms_ = (configure_graph->refresh_period_) * 1000; // Convert seconds in milliseconds
+  refresh_freq_ = configure_graph->refresh_freq_; // Hz
   Q_EMIT configChanged();
+
+  // Restart the timer in case we are recording
+  if (graph_refresh_timer_->isActive())
+  {
+    graph_refresh_timer_->stop();
+    graph_refresh_timer_->start((1.0 / configure_graph->refresh_freq_) * 1000.0); // Hz > seconds > milliseconds
+  }
 }
 
 void GraphPanel::enableLegend(bool legend_enable)
