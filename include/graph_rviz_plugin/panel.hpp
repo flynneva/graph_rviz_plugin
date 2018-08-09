@@ -4,10 +4,10 @@
 #include <atomic>
 #include <chrono>
 #include <deque>
-#include <graph_rviz_plugin/configure_graph.hpp>
-#include <graph_rviz_plugin/configure.hpp>
+#include <graph_rviz_plugin/graph_settings.hpp>
 #include <graph_rviz_plugin/qcustomplot.h>
 #include <graph_rviz_plugin/selection_topics.hpp>
+#include <graph_rviz_plugin/settings.hpp>
 #include <graph_rviz_plugin/topic_color.hpp>
 #include <graph_rviz_plugin/topic_data.hpp>
 #include <memory>

@@ -1,5 +1,5 @@
-#ifndef GRAPH_RVIZ_PLUGIN_CONFIGURE_GRAPH_HPP
-#define GRAPH_RVIZ_PLUGIN_CONFIGURE_GRAPH_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_SETTINGS_HPP
+#define GRAPH_RVIZ_PLUGIN_SETTINGS_HPP
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -14,13 +14,13 @@
 namespace graph_rviz_plugin
 {
 
-class ConfigureGraph : public QDialog
+class Settings : public QDialog
 {
   Q_OBJECT
 
 public:
-  ConfigureGraph(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max , double w_time , double refresh_freq, QDialog *parent = 0);
-  ~ConfigureGraph();
+  Settings(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max , double w_time , double refresh_freq, QDialog *parent = 0);
+  ~Settings();
   double y_min_;
   double y_max_;
   double w_time_;

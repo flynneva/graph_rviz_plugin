@@ -1,9 +1,9 @@
-#include <graph_rviz_plugin/configure_graph.hpp>
+#include <graph_rviz_plugin/settings.hpp>
 
 namespace graph_rviz_plugin
 {
 
-ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
+Settings::Settings(bool scale_auto, bool window_time_enable, bool
                                legend_enable, double y_min, double y_max, double w_time , double
                                refresh_freq, QDialog *):
   y_min_(y_min),
@@ -114,17 +114,17 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
   main_layout->addWidget(button_box);
 
-  connect(button_box, &QDialogButtonBox::accepted, this, &ConfigureGraph::okClicked);
+  connect(button_box, &QDialogButtonBox::accepted, this, &Settings::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
   connect(y_min_double_spin_box_, SIGNAL(valueChanged(double)), this, SLOT(yMinChanged(double)));
   connect(y_max_double_spin_box_, SIGNAL(valueChanged(double)), this, SLOT(yMaxChanged(double)));
 }
 
-ConfigureGraph::~ConfigureGraph()
+Settings::~Settings()
 {
 }
 
-void ConfigureGraph::yAxisAutoscale(bool checked)
+void Settings::yAxisAutoscale(bool checked)
 {
   if (checked == false)
   {
@@ -141,7 +141,7 @@ void ConfigureGraph::yAxisAutoscale(bool checked)
 }
 
 
-void ConfigureGraph::xAxisWindowTime(bool checked)
+void Settings::xAxisWindowTime(bool checked)
 {
   if (checked == false)
   {
@@ -155,7 +155,7 @@ void ConfigureGraph::xAxisWindowTime(bool checked)
   }
 }
 
-void ConfigureGraph::yMinChanged(double y_min)
+void Settings::yMinChanged(double y_min)
 {
   y_min_ = y_min;
 
@@ -166,7 +166,7 @@ void ConfigureGraph::yMinChanged(double y_min)
   }
 }
 
-void ConfigureGraph::yMaxChanged(double y_max)
+void Settings::yMaxChanged(double y_max)
 {
   y_max_ = y_max;
 
@@ -178,7 +178,7 @@ void ConfigureGraph::yMaxChanged(double y_max)
 }
 
 
-void ConfigureGraph::okClicked()
+void Settings::okClicked()
 {
   if (scale_auto_ == false)
   {

@@ -1,9 +1,9 @@
-#include <graph_rviz_plugin/configure.hpp>
+#include <graph_rviz_plugin/graph_settings.hpp>
 
 namespace graph_rviz_plugin
 {
 
-Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):
+GraphSettings::GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):
   displayed_topics_(displayed_topics)
 {
   setWindowTitle("Graph settings");
@@ -60,15 +60,15 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok| QDialogButtonBox::Cancel);
   configure_layout->addWidget(button_box);
 
-  connect(button_box, &QDialogButtonBox::accepted, this, &Configure::okClicked);
+  connect(button_box, &QDialogButtonBox::accepted, this, &GraphSettings::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-Configure::~Configure()
+GraphSettings::~GraphSettings()
 {
 }
 
-void Configure::okClicked()
+void GraphSettings::okClicked()
 {
   for (auto button : topic_buttons_)
   {
