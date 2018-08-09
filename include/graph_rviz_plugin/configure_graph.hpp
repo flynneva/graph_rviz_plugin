@@ -19,12 +19,12 @@ class ConfigureGraph : public QDialog
   Q_OBJECT
 
 public:
-  ConfigureGraph(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max , double w_time , double refresh_period, QDialog *parent = 0);
+  ConfigureGraph(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max , double w_time , double refresh_freq, QDialog *parent = 0);
   ~ConfigureGraph();
   double y_min_;
   double y_max_;
   double w_time_;
-  double refresh_period_; // in seconds
+  double refresh_freq_; // in Hz
   bool scale_auto_;
   bool window_time_enable_;
   bool legend_enable_;

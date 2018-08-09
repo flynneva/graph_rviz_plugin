@@ -76,7 +76,7 @@ private:
   double y_min_ = 0;
   double y_max_ = 1;
   double w_time_ = 1;
-  double refresh_period_ms_ = 16; // in milliseconds
+  unsigned refresh_freq_ = 40; // in Hz
 };
 
 }
