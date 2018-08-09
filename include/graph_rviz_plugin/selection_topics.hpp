@@ -25,10 +25,7 @@ public:
                   std::deque<std::shared_ptr<TopicData>> already_displayed_topics,
                   QDialog *parent = 0);
   ~SelectionTopics();
-  void detectTopics();
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
-  std::deque<std::shared_ptr<TopicData>> already_displayed_topics_;
-  std::shared_ptr<ros::NodeHandle> nh_;
   ros::master::V_TopicInfo supported_topics_;
 
 Q_SIGNALS:
@@ -45,7 +42,10 @@ protected Q_SLOTS:
   void okClicked();
 
 private:
+  void detectTopics();
   std::vector<QCheckBox *> topic_buttons_;
+  std::shared_ptr<ros::NodeHandle> nh_;
+  std::deque<std::shared_ptr<TopicData>> already_displayed_topics_;
 };
 
 }

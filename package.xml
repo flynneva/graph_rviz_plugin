@@ -2,7 +2,7 @@
 <package format="2">
   <name>graph_rviz_plugin</name>
   <version>0.0.1</version>
-  <description>RViz graph plugin</description>
+  <description>An RViz plugin to draw graphs from topics values</description>
 
   <author>Édouard Pronier, Victor Lamoine - Institut Maupertuis</author>
   <maintainer email="victor.lamoine@gmail.com">Victor Lamoine</maintainer>

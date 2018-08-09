@@ -32,6 +32,8 @@ public:
 protected Q_SLOTS:
   void yAxisAutoscale(bool checked);
   void xAxisWindowTime(bool checked);
+  void yMinChanged(double y_min);
+  void yMaxChanged(double y_max);
   void okClicked();
 
 private:

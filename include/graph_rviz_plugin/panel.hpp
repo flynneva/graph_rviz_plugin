@@ -19,6 +19,7 @@
 #include <graph_rviz_plugin/qcustomplot.h>
 #include <graph_rviz_plugin/selection_topics.hpp>
 #include <graph_rviz_plugin/topic_data.hpp>
+#include <graph_rviz_plugin/topic_color.hpp>
 #include <rviz/panel.h>
 #include <thread>
 
@@ -32,7 +33,6 @@ class GraphPanel : public rviz::Panel
 public:
   GraphPanel(QWidget *parent = 0);
   virtual ~GraphPanel();
-  std::shared_ptr<ros::NodeHandle> nh_;
 
 Q_SIGNALS:
   void enable(const bool);
@@ -48,22 +48,31 @@ protected Q_SLOTS:
                                 const QMessageBox::Icon icon = QMessageBox::Icon::Information);
   virtual void load(const rviz::Config &config);
   virtual void save(rviz::Config config) const;
-  void startStopClicked();
+  void startPauseClicked();
+  void stopClicked();
   void topicsSelectionClicked();
-  void configClicked();
-  void graphClicked();
-  void clearClicked();
+  void graphSettingsClicked();
+  void settingsClicked();
+  void resetClicked();
   void graphUpdate();
+  void graphSettingsUpdate();
+  void enableLegend(bool legend_enable);
+  void graphInit();
 
 private:
-  QPushButton *start_stop_button_;
+  std::shared_ptr<ros::NodeHandle> nh_;
+  QPushButton *start_pause_button_;
   QPushButton *topic_button_;
+  QPushButton *stop_button_;
+  QPushButton *graph_settings_button_;
   QTimer *graph_refresh_timer_;
+  TopicColor topic_color_class_;
   QCustomPlot *plot_;
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   std::atomic<bool> legend_enable_;
   std::atomic<bool> yaxis_rescale_auto_;
   std::atomic<bool> window_time_enable_;
+  std::atomic<bool> graph_stopped_;
   double y_min_ = 0;
   double y_max_ = 1;
   double w_time_ = 1;
