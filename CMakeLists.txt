@@ -28,6 +28,7 @@ set(
   ${PROJECT_NAME}_configure_graph
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_topic_color
   ${PROJECT_NAME}_topics_data
 )
 
@@ -96,6 +97,26 @@ target_link_libraries(
   Qt5::Gui
 )
 
+## TopicColor
+qt5_wrap_cpp(
+  topic_color_MOCS
+  include/${PROJECT_NAME}/topic_color.hpp
+)
+add_library(
+  ${PROJECT_NAME}_topic_color
+  ${topic_color_MOCS}
+  src/topic_color.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}_topic_color
+  Qt5::Widgets
+  Qt5::Gui
+)
+add_dependencies(
+  ${PROJECT_NAME}_topic_color
+  ${catkin_EXPORTED_TARGETS}
+)
+
 ## SelectionTopics
 qt5_wrap_cpp(
   selection_topics_MOCS
@@ -131,12 +152,14 @@ add_library(
 target_link_libraries(
   ${PROJECT_NAME}_configure
   ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
   Qt5::Widgets
   Qt5::Gui
 )
 add_dependencies(
   ${PROJECT_NAME}_configure
   ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -177,6 +200,7 @@ target_link_libraries(
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
   Qt5::Widgets
   Qt5::Gui
   ${catkin_LIBRARIES}
@@ -188,6 +212,7 @@ add_dependencies(
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -201,7 +226,8 @@ class_loader_hide_library_symbols(
 #############
 
 ## Mark executables and/or libraries for installation
-install(TARGETS
+install(
+  TARGETS
   ${PROJECT_TARGETS}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -216,14 +242,6 @@ install(
   ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-install(
-  DIRECTORY
-  config
-  launch
-  DESTINATION
-  ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
 install(
   FILES
   plugin.xml

@@ -6,8 +6,8 @@ namespace graph_rviz_plugin
 SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
                                  std::deque<std::shared_ptr<TopicData>> already_displayed_topics,
                                  QDialog *) :
-  already_displayed_topics_(already_displayed_topics),
-  nh_(nh)
+  nh_(nh),
+  already_displayed_topics_(already_displayed_topics)
 {
   setWindowTitle("Topics selection");
   QVBoxLayout *main_layout = new QVBoxLayout;
@@ -37,6 +37,7 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
 
     scroll_widget_layout->addWidget(radio_button);
   }
+
   main_layout->addWidget(scroll_area);
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
       | QDialogButtonBox::Cancel);
@@ -46,7 +47,6 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
   connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
           this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
-
 }
 
 SelectionTopics::~SelectionTopics()

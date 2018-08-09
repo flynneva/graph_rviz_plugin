@@ -12,34 +12,42 @@ TopicData::TopicData(std::string topic_name,
   topic_name_(topic_name),
   topic_type_(topic_type)
 {
+}
+
+TopicData::~TopicData()
+{
+}
+
+void TopicData::startRefreshData()
+{
   begin_ = ros::Time::now();
 
   if (!nh_)
     throw std::runtime_error("Node handle not initialized!");
 
-  if (topic_type == "std_msgs/Bool")
+  if (topic_type_ == "std_msgs/Bool")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::boolCallback, this);
-  else if (topic_type == "std_msgs/Duration")
+  else if (topic_type_ == "std_msgs/Duration")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::durationCallback, this);
-  else if (topic_type == "std_msgs/Float32")
+  else if (topic_type_ == "std_msgs/Float32")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::float32Callback, this);
-  else if (topic_type == "std_msgs/Float64")
+  else if (topic_type_ == "std_msgs/Float64")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::float64Callback, this);
-  else if (topic_type == "std_msgs/Int8")
+  else if (topic_type_ == "std_msgs/Int8")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::int8Callback, this);
-  else if (topic_type == "std_msgs/Int16")
+  else if (topic_type_ == "std_msgs/Int16")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::int16Callback, this);
-  else if (topic_type == "std_msgs/Int32")
+  else if (topic_type_ == "std_msgs/Int32")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::int32Callback, this);
-  else if (topic_type == "std_msgs/Int64")
+  else if (topic_type_ == "std_msgs/Int64")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::int64Callback, this);
-  else if (topic_type == "std_msgs/UInt8")
+  else if (topic_type_ == "std_msgs/UInt8")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint8Callback, this);
-  else if (topic_type == "std_msgs/UInt16")
+  else if (topic_type_ == "std_msgs/UInt16")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint16Callback, this);
-  else if (topic_type == "std_msgs/UInt32")
+  else if (topic_type_ == "std_msgs/UInt32")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint32Callback, this);
-  else if (topic_type == "std_msgs/UInt64")
+  else if (topic_type_ == "std_msgs/UInt64")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint64Callback, this);
   else
   {
@@ -48,8 +56,33 @@ TopicData::TopicData(std::string topic_name,
   }
 }
 
-TopicData::~TopicData()
+void TopicData::clearData()
 {
+  topic_data_.clear();
+  topic_time_.clear();
+}
+
+void TopicData::stopRefreshData()
+{
+  sub_.shutdown();
+}
+
+void TopicData::pushData(const double data, const ros::Time now)
+{
+  double time = (now.toSec() - begin_.toSec());
+
+  try
+  {
+    topic_time_.push_back(time);
+    topic_data_.push_back(data);
+  }
+  catch (const std::exception &e)
+  {
+    ROS_WARN_STREAM("Memory full, acquisition stop");
+    Q_EMIT displayMessageBox("Fatal Error", "Memory is full, acquisition is stopped.", "",
+                             QMessageBox::Icon::Critical);
+    sub_.shutdown();
+  }
 }
 
 void TopicData::boolCallback(const std_msgs::BoolConstPtr &msg)
@@ -168,24 +201,6 @@ QVector<double> TopicData::getTopicTime()
   return topic_time_;
 }
 
-void TopicData::pushData(const double data, const ros::Time now)
-{
-  double time = (now.toSec() - begin_.toSec());
-
-  try
-  {
-    topic_time_.push_back(time);
-    topic_data_.push_back(data);
-  }
-  catch (const std::exception &e)
-  {
-    ROS_WARN_STREAM("Memory full, acquisition stop");
-    Q_EMIT displayMessageBox("Fatal Error", "Memory is full, acquisition is stopped.", "",
-                             QMessageBox::Icon::Critical);
-    sub_.shutdown();
-  }
-}
-
 void TopicData::displayMessageBoxHandler(const QString title,
     const QString message,
     const QString info_msg,
@@ -199,4 +214,5 @@ void TopicData::displayMessageBoxHandler(const QString title,
   msg_box.setStandardButtons(QMessageBox::Ok);
   msg_box.exec();
 }
+
 }

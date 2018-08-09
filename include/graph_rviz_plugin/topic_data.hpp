@@ -39,20 +39,21 @@ public:
 
   ~TopicData();
   std::shared_ptr<ros::NodeHandle> nh_;
-  std::string topic_name_;
-  std::string topic_type_;
+  const std::string topic_name_;
+  const std::string topic_type_;
   QColor color_ = Qt::GlobalColor::black;
   unsigned thickness_ = 1;
   bool displayed_ = true;
   bool data_update_ = true;
-  bool graph_enable_ = false;
   QCPGraph::LineStyle line_style_ = QCPGraph::lsLine;
   QCPScatterStyle::ScatterShape scatter_shape_ = QCPScatterStyle::ssCross;
-  ros::Time begin_;
   QVector<double> topic_data_;
   QVector<double> topic_time_;
   QVector<double> getTopicData();
   QVector<double> getTopicTime();
+  void startRefreshData();
+  void stopRefreshData();
+  void clearData();
 
 Q_SIGNALS:
   void vectorUpdated(std::string topic_name);
@@ -69,6 +70,8 @@ protected Q_SLOTS:
 
 private:
   ros::Subscriber sub_;
+  ros::Time begin_;
+  std::mutex data_mutex_;
   void boolCallback(const std_msgs::BoolConstPtr &msg);
   void durationCallback(const std_msgs::DurationConstPtr &msg);
   void float32Callback(const std_msgs::Float32ConstPtr &msg);
@@ -83,7 +86,6 @@ private:
   void uint32Callback(const std_msgs::UInt32ConstPtr &msg);
   void uint64Callback(const std_msgs::UInt64ConstPtr &msg);
   void pushData(const double Data, const ros::Time now);
-  std::mutex data_mutex_;
 };
 
 }

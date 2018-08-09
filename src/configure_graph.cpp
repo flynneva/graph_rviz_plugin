@@ -3,7 +3,9 @@
 namespace graph_rviz_plugin
 {
 
-ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max, double w_time , double refresh_period, QDialog *):
+ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
+                               legend_enable, double y_min, double y_max, double w_time , double
+                               refresh_period, QDialog *):
   y_min_(y_min),
   y_max_(y_max),
   w_time_(w_time),
@@ -17,7 +19,7 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool le
   refresh_frequency_spin_box_(new QComboBox),
   legend_enable_button_(new QCheckBox("Enable legend"))
 {
-  setWindowTitle("Graph configuration");
+  setWindowTitle("Settings");
   QVBoxLayout *main_layout = new QVBoxLayout;
   setLayout(main_layout);
 
@@ -68,9 +70,9 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool le
     y_axis_autoscale->setChecked(false);
     y_min_double_spin_box_->setEnabled(true);
     y_max_double_spin_box_->setEnabled(true);
-    y_min_double_spin_box_->setValue(y_min_);
-    y_max_double_spin_box_->setValue(y_max_);
   }
+  y_min_double_spin_box_->setValue(y_min_);
+  y_max_double_spin_box_->setValue(y_max_);
 
   y_axis_layout->addRow("Y max: ", y_max_double_spin_box_);
   y_axis_layout->addRow("Y min: ", y_min_double_spin_box_);
@@ -81,6 +83,7 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool le
   QFormLayout *x_axis_layout = new QFormLayout;
   QCheckBox *x_axis_window_time_button = new QCheckBox("Window time");
   x_axis_layout->addWidget(x_axis_window_time_button);
+  w_time_double_spin_box_->setRange(1, 600);
 
   if (window_time_enable_ == false)
   {
@@ -100,12 +103,13 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool le
 
   connect(y_axis_autoscale, SIGNAL(toggled(bool)), SLOT(yAxisAutoscale(bool)));
   connect(x_axis_window_time_button, SIGNAL(toggled(bool)), SLOT(xAxisWindowTime(bool)));
-  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
-      | QDialogButtonBox::Cancel);
+  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
   main_layout->addWidget(button_box);
 
   connect(button_box, &QDialogButtonBox::accepted, this, &ConfigureGraph::okClicked);
   connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  connect(y_min_double_spin_box_, SIGNAL(valueChanged(double)), this, SLOT(yMinChanged(double)));
+  connect(y_max_double_spin_box_, SIGNAL(valueChanged(double)), this, SLOT(yMaxChanged(double)));
 }
 
 ConfigureGraph::~ConfigureGraph()
@@ -143,6 +147,29 @@ void ConfigureGraph::xAxisWindowTime(bool checked)
   }
 }
 
+void ConfigureGraph::yMinChanged(double y_min)
+{
+  y_min_ = y_min;
+
+  if (y_min_ > y_max_)
+  {
+    y_max_ = y_min_ + 0.1;
+    y_max_double_spin_box_->setValue(y_max_);
+  }
+}
+
+void ConfigureGraph::yMaxChanged(double y_max)
+{
+  y_max_ = y_max;
+
+  if (y_max_ < y_min_)
+  {
+    y_min_ = y_min_ - 0.1;
+    y_min_double_spin_box_->setValue(y_min_);
+  }
+}
+
+
 void ConfigureGraph::okClicked()
 {
   if (scale_auto_ == false)
@@ -152,9 +179,7 @@ void ConfigureGraph::okClicked()
   }
 
   if (window_time_enable_ == true)
-  {
     w_time_ = w_time_double_spin_box_->value();
-  }
 
   legend_enable_ = legend_enable_button_->isChecked();
 
@@ -168,6 +193,7 @@ void ConfigureGraph::okClicked()
     refresh_period_ = 0.0125;
   else
     refresh_period_ = 0.01;
+
   accept();
 }
 

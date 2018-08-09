@@ -6,17 +6,17 @@ namespace graph_rviz_plugin
 Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):
   displayed_topics_(displayed_topics)
 {
-  setWindowTitle("Configure topics");
+  setWindowTitle("Graph settings");
+  resize(600, 240);
   QVBoxLayout *configure_layout = new QVBoxLayout;
   setLayout(configure_layout);
-  QStringList color_list = {"Red", "Green", "Blue", "Cyan", "Magenta", "Yellow", "Black", "Gray"};
+  QStringList color_list = topic_color_.getColorsStringList();
   QTableWidget *main_table = new QTableWidget;
   main_table->setColumnCount(3);
   QStringList horiz_header_names = {"Display", "Color", "Thickness"};
+  QStringList vertical_header_names;
   main_table->setHorizontalHeaderLabels(horiz_header_names);
   main_table->setRowCount(displayed_topics_.size());
-
-  QStringList vertical_header_names;
 
   for (auto topic : displayed_topics_)
     vertical_header_names.push_back(QString::fromStdString(topic->topic_name_));
@@ -41,24 +41,7 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
     topic_combobox_.push_back(color_selection_combobox);
     color_selection_combobox->setObjectName(QString::fromStdString(displayed_topics_.at(i)->topic_name_));
     color_selection_combobox->addItems(color_list);
-
-    if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::red)
-      color_selection_combobox->setCurrentIndex(0);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::green)
-      color_selection_combobox->setCurrentIndex(1);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::blue)
-      color_selection_combobox->setCurrentIndex(2);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkCyan)
-      color_selection_combobox->setCurrentIndex(3);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkMagenta)
-      color_selection_combobox->setCurrentIndex(4);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::darkYellow)
-      color_selection_combobox->setCurrentIndex(5);
-    else if (displayed_topics_.at(i)->color_ == Qt::GlobalColor::black)
-      color_selection_combobox->setCurrentIndex(6);
-    else
-      color_selection_combobox->setCurrentIndex(7);
-
+    color_selection_combobox->setCurrentIndex(topic_color_.getIndexFromColor(displayed_topics_.at(i)->color_));
     main_table->setCellWidget(i, 1, color_selection_combobox);
 
     // Thickness
@@ -74,8 +57,7 @@ Configure::Configure(std::deque<std::shared_ptr<TopicData>> displayed_topics, QD
   main_table->resizeRowsToContents();
 
   configure_layout->addWidget(main_table);
-  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok
-      | QDialogButtonBox::Cancel);
+  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok| QDialogButtonBox::Cancel);
   configure_layout->addWidget(button_box);
 
   connect(button_box, &QDialogButtonBox::accepted, this, &Configure::okClicked);
@@ -118,28 +100,13 @@ void Configure::okClicked()
       if ((displayed_topics_.at(i)->topic_name_) == combobox->objectName().toStdString())
       {
         const int index = combobox->currentIndex();
+        displayed_topics_.at(i)->color_ = topic_color_.getColorFromIndex(index);
 
-        if (index == 0)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::red;
-        else if (index == 1)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::green;
-        else if (index == 2)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::blue;
-        else if (index == 3)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkCyan;
-        else if (index == 4)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkMagenta;
-        else if (index == 5)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::darkYellow;
-        else if (index == 6)
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::black;
-        else
-          displayed_topics_.at(i)->color_ = Qt::GlobalColor::gray;
       }
     }
   }
 
-  close();
+  accept();
   return;
 }
 
