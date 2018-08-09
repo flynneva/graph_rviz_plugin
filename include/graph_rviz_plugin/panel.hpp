@@ -4,8 +4,16 @@
 #include <atomic>
 #include <chrono>
 #include <deque>
+#include <graph_rviz_plugin/configure_graph.hpp>
+#include <graph_rviz_plugin/configure.hpp>
+#include <graph_rviz_plugin/qcustomplot.h>
+#include <graph_rviz_plugin/selection_topics.hpp>
+#include <graph_rviz_plugin/topic_color.hpp>
+#include <graph_rviz_plugin/topic_data.hpp>
 #include <memory>
 #include <mutex>
+#include <QFileDialog>
+#include <QFileInfo>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
@@ -14,12 +22,6 @@
 #include <ros/ros.h>
 #include <ros/service.h>
 #include <ros/time.h>
-#include <graph_rviz_plugin/configure_graph.hpp>
-#include <graph_rviz_plugin/configure.hpp>
-#include <graph_rviz_plugin/qcustomplot.h>
-#include <graph_rviz_plugin/selection_topics.hpp>
-#include <graph_rviz_plugin/topic_data.hpp>
-#include <graph_rviz_plugin/topic_color.hpp>
 #include <rviz/panel.h>
 #include <thread>
 
@@ -58,6 +60,7 @@ protected Q_SLOTS:
   void graphSettingsUpdate();
   void enableLegend(bool legend_enable);
   void graphInit();
+  void exportClicked();
 
 private:
   std::shared_ptr<ros::NodeHandle> nh_;
@@ -65,9 +68,11 @@ private:
   QPushButton *topic_button_;
   QPushButton *stop_button_;
   QPushButton *graph_settings_button_;
+  QPushButton *export_button_;
   QTimer *graph_refresh_timer_;
   TopicColor topic_color_class_;
   QCustomPlot *plot_;
+  QString export_directory_ = "";
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
   std::atomic<bool> legend_enable_;
   std::atomic<bool> yaxis_rescale_auto_;

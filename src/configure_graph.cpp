@@ -27,7 +27,7 @@ ConfigureGraph::ConfigureGraph(bool scale_auto, bool window_time_enable, bool
   QVBoxLayout *general_layout = new QVBoxLayout;
   QLabel *title_combo_box = new QLabel("Refresh frequency");
   general_layout->addWidget(title_combo_box);
-  QStringList frequency_list = {"1 Hz", "2 Hz", "5 Hz", "10 Hz", "20 Hz", "40Hz", "60Hz", "100Hz"};
+  QStringList frequency_list = {"1 Hz", "2 Hz", "5 Hz", "10 Hz", "20 Hz", "40 Hz", "60 Hz", "100 Hz"};
   refresh_frequency_spin_box_->addItems(frequency_list);
 
   if (refresh_freq_ == 1)
