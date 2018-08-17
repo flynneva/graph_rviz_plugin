@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <library path="lib/libgraph_rviz_plugin">
-  <class name="graph_rviz_plugin/GraphPanel"
+  <class name="graph_rviz_plugin/Graph"
          type="graph_rviz_plugin::GraphPanel"
          base_class_type="rviz::Panel">
     <description>
