@@ -21,6 +21,11 @@ SelectionTopics::SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
   scroll_area->setFrameShape(QFrame::NoFrame);
   detectTopics();
 
+  std::sort(supported_topics_.begin(), supported_topics_.end(), [](ros::master::TopicInfo a, ros::master::TopicInfo b)
+  {
+    return a.name < b.name;
+  });
+
   for (auto topic : supported_topics_)
   {
     QCheckBox *radio_button = new QCheckBox;
