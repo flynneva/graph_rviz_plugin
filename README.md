@@ -27,6 +27,33 @@ Supported built-in types are:
 
 :information_source: The panel configuration is saved/loaded in the RViz configuration file, this includes which topics are recorded, the graph settings and settings.
 
+
+# Dependencies
+
+## rosdep
+Install, initialize and update [rosdep](https://wiki.ros.org/rosdep).
+
+# Compiling
+Create a catkin workspace and clone the project:
+
+```bash
+mkdir -p catkin_workspace/src
+cd catkin_workspace/src
+git clone https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin.git
+cd ..
+```
+
+## Resolve ROS dependencies
+```bash
+rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
+```
+
+## Compile
+```bash
+catkin_make
+```
+
+
 # User manual
 
 ## Start / pause
