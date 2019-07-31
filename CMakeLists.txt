@@ -12,10 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   rviz
 )
 
-## Find Qt5 modules
+## Find Qt5
+set(CMAKE_AUTOMOC ON)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Gui REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
 set(
@@ -67,52 +66,37 @@ include_directories(
 )
 
 ## QCustomPlot
-qt5_wrap_cpp(
-  qcustomplot_MOCS
-  include/${PROJECT_NAME}/qcustomplot.h
-)
 add_library(
   ${PROJECT_NAME}_qcustomplot
-  ${qcustomplot_MOCS}
+  include/${PROJECT_NAME}/qcustomplot.h
   src/qcustomplot.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}_qcustomplot
   Qt5::Widgets
-  Qt5::Gui
   Qt5::PrintSupport
 )
 
 ## TopicsData
-qt5_wrap_cpp(
-  topics_data_MOCS
-  include/${PROJECT_NAME}/topic_data.hpp
-)
 add_library(
   ${PROJECT_NAME}_topics_data
-  ${topics_data_MOCS}
+  include/${PROJECT_NAME}/topic_data.hpp
   src/topic_data.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}_topics_data
   Qt5::Widgets
-  Qt5::Gui
 )
 
 ## TopicColor
-qt5_wrap_cpp(
-  topic_color_MOCS
-  include/${PROJECT_NAME}/topic_color.hpp
-)
 add_library(
   ${PROJECT_NAME}_topic_color
-  ${topic_color_MOCS}
+  include/${PROJECT_NAME}/topic_color.hpp
   src/topic_color.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}_topic_color
   Qt5::Widgets
-  Qt5::Gui
 )
 add_dependencies(
   ${PROJECT_NAME}_topic_color
@@ -120,20 +104,15 @@ add_dependencies(
 )
 
 ## SelectionTopics
-qt5_wrap_cpp(
-  selection_topics_MOCS
-  include/${PROJECT_NAME}/selection_topics.hpp
-)
 add_library(
   ${PROJECT_NAME}_selection_topics
-  ${selection_topics_MOCS}
+  include/${PROJECT_NAME}/selection_topics.hpp
   src/selection_topics.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}_selection_topics
   ${PROJECT_NAME}_topics_data
   Qt5::Widgets
-  Qt5::Gui
 )
 add_dependencies(
   ${PROJECT_NAME}_selection_topics
@@ -142,13 +121,9 @@ add_dependencies(
 )
 
 ## Graph settings
-qt5_wrap_cpp(
-  graph_settings_MOCS
-  include/${PROJECT_NAME}/graph_settings.hpp
-)
 add_library(
   ${PROJECT_NAME}_graph_settings
-  ${graph_settings_MOCS}
+  include/${PROJECT_NAME}/graph_settings.hpp
   src/graph_settings.cpp
 )
 target_link_libraries(
@@ -156,7 +131,6 @@ target_link_libraries(
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   Qt5::Widgets
-  Qt5::Gui
 )
 add_dependencies(
   ${PROJECT_NAME}_graph_settings
@@ -166,19 +140,14 @@ add_dependencies(
 )
 
 ## Settings
-qt5_wrap_cpp(
-  settings_MOCS
-  include/${PROJECT_NAME}/settings.hpp
-)
 add_library(
   ${PROJECT_NAME}_settings
-  ${settings_MOCS}
+  include/${PROJECT_NAME}/settings.hpp
   src/settings.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}_settings
   Qt5::Widgets
-  Qt5::Gui
 )
 add_dependencies(
   ${PROJECT_NAME}_settings
@@ -186,13 +155,9 @@ add_dependencies(
 )
 
 ## Qt panel
-qt5_wrap_cpp(
-  ${PROJECT_NAME}_MOCS
-  include/${PROJECT_NAME}/panel.hpp
-)
 add_library(
   ${PROJECT_NAME}
-  ${${PROJECT_NAME}_MOCS}
+  include/${PROJECT_NAME}/panel.hpp
   src/panel.cpp
 )
 target_link_libraries(
@@ -204,7 +169,6 @@ target_link_libraries(
   ${PROJECT_NAME}_topics_data
   ${PROJECT_NAME}_topic_color
   Qt5::Widgets
-  Qt5::Gui
   ${catkin_LIBRARIES}
 )
 add_dependencies(
