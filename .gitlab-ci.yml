@@ -13,7 +13,7 @@ catkin lint:
   stage: build
   image: ros:melodic-ros-core
   before_script:
-    - apt update  >/dev/null 2>&1
+    - apt update >/dev/null 2>&1
     - apt install -y python-catkin-lint >/dev/null 2>&1
   script:
     - catkin_lint -W3 .
