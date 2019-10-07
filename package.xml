@@ -11,10 +11,12 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>class_loader</depend>
+  <depend>cv_bridge</depend>
   <depend>qtbase5-dev</depend>
   <depend>roscpp</depend>
   <depend>rqt_gui</depend>
   <depend>rviz</depend>
+  <depend>sensor_msgs</depend>
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml"/>

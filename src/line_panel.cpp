@@ -1,21 +1,21 @@
-#include <graph_rviz_plugin/panel.hpp>
+#include <graph_rviz_plugin/line_panel.hpp>
 
 namespace graph_rviz_plugin
 {
 
-GraphPanel::GraphPanel(QWidget *parent) :
-  rviz::Panel(parent),
-  nh_(std::make_shared<ros::NodeHandle>()),
-  start_pause_button_(new QPushButton),
-  topic_button_(new QPushButton("Topics")),
-  stop_button_(new QPushButton("Stop")),
-  graph_settings_button_(new QPushButton("Graph settings")),
-  export_button_(new QPushButton("Export")),
-  graph_refresh_timer_(new QTimer(this)),
-  plot_(new QCustomPlot)
+LinePanel::LinePanel(QWidget *parent) :
+    rviz::Panel(parent),
+    nh_(std::make_shared<ros::NodeHandle>()),
+    start_pause_button_(new QPushButton),
+    topic_button_(new QPushButton("Topics")),
+    stop_button_(new QPushButton("Stop")),
+    graph_settings_button_(new QPushButton("Graph settings")),
+    export_button_(new QPushButton("Export")),
+    graph_refresh_timer_(new QTimer(this)),
+    plot_(new QCustomPlot)
 {
-  connect(this, SIGNAL(enable(const bool)), this, SLOT(setEnabled(const bool)));
-  setName("Graph");
+  connect(this, &LinePanel::enable, this, &LinePanel::setEnabled);
+  setName("Line graph");
   setObjectName(getName());
 
   yaxis_rescale_auto_ = true;
@@ -26,18 +26,17 @@ GraphPanel::GraphPanel(QWidget *parent) :
   refresh_freq_ = 40;
 
   qRegisterMetaType<QMessageBox::Icon>();
-  connect(this, SIGNAL(displayMessageBox(const QString, const QString, const QString, const QMessageBox::Icon)),
-          this, SLOT(displayMessageBoxHandler(const QString, const QString, const QString, const QMessageBox::Icon)));
+  connect(this, &LinePanel::displayMessageBox, this, &LinePanel::displayMessageBoxHandler);
 
-  connect(start_pause_button_, SIGNAL(clicked()), SLOT(startPauseClicked()));
-  connect(stop_button_, SIGNAL(clicked()), SLOT(stopClicked()));
-  connect(topic_button_, SIGNAL(clicked()), SLOT(topicsSelectionClicked()));
-  connect(graph_settings_button_, SIGNAL(clicked()), SLOT(graphSettingsClicked()));
+  connect(start_pause_button_, &QPushButton::clicked, this, &LinePanel::startPauseClicked);
+  connect(stop_button_, &QPushButton::clicked, this, &LinePanel::stopClicked);
+  connect(topic_button_, &QPushButton::clicked, this, &LinePanel::topicsSelectionClicked);
+  connect(graph_settings_button_, &QPushButton::clicked, this, &LinePanel::graphSettingsClicked);
   QPushButton *settings_button = new QPushButton("Settings");
-  connect(settings_button, SIGNAL(clicked()), SLOT(settingsClicked()));
-  connect(export_button_, SIGNAL(clicked()), SLOT(exportClicked()));
+  connect(settings_button, &QPushButton::clicked, this, &LinePanel::settingsClicked);
+  connect(export_button_, &QPushButton::clicked, this, &LinePanel::exportClicked);
   QPushButton *reset_button = new QPushButton("Reset");
-  connect(reset_button, SIGNAL(clicked()), SLOT(resetClicked()));
+  connect(reset_button, &QPushButton::clicked, this, &LinePanel::resetClicked);
 
   start_pause_button_->setText("Start");
 
@@ -57,7 +56,7 @@ GraphPanel::GraphPanel(QWidget *parent) :
   layout->addLayout(button_layout);
   layout->addWidget(plot_);
 
-  connect(graph_refresh_timer_, SIGNAL(timeout()), this, SLOT(graphUpdate()));
+  connect(graph_refresh_timer_, &QTimer::timeout, this, &LinePanel::graphUpdate);
 
   QFont legendFont = font();
   legendFont.setPointSize(9);
@@ -70,13 +69,13 @@ GraphPanel::GraphPanel(QWidget *parent) :
   export_button_->setEnabled(false);
 }
 
-GraphPanel::~GraphPanel()
+LinePanel::~LinePanel()
 {
   nh_->shutdown();
   graph_refresh_timer_->stop();
 }
 
-void GraphPanel::graphInit()
+void LinePanel::graphInit()
 {
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -87,7 +86,7 @@ void GraphPanel::graphInit()
   }
 }
 
-void GraphPanel::graphSettingsUpdate()
+void LinePanel::graphSettingsUpdate()
 {
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -99,7 +98,7 @@ void GraphPanel::graphSettingsUpdate()
   plot_->replot();
 }
 
-void GraphPanel::graphUpdate()
+void LinePanel::graphUpdate()
 {
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
@@ -118,17 +117,17 @@ void GraphPanel::graphUpdate()
       else
         plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignRight);
 
-      plot_->graph(i)->setData(topic_time, topic_data);
+      plot_->graph(i)->setData(topic_time, topic_data, true);
       displayed_topics_.at(i)->data_update_ = false;
       plot_->replot();
     }
   }
 }
 
-void GraphPanel::displayMessageBoxHandler(const QString title,
-    const QString message,
-    const QString info_msg,
-    const QMessageBox::Icon icon)
+void LinePanel::displayMessageBoxHandler(const QString title,
+                                         const QString message,
+                                         const QString info_msg,
+                                         const QMessageBox::Icon icon)
 {
   const bool old(isEnabled());
   Q_EMIT setEnabled(false);
@@ -142,7 +141,7 @@ void GraphPanel::displayMessageBoxHandler(const QString title,
   Q_EMIT setEnabled(old);
 }
 
-void GraphPanel::load(const rviz::Config &config)
+void LinePanel::load(const rviz::Config &config)
 {
   rviz::Panel::load(config);
 
@@ -164,13 +163,13 @@ void GraphPanel::load(const rviz::Config &config)
     float tmp;
 
     if (config.mapGetFloat("w_time", &tmp))
-      w_time_ = (double)tmp;
+      w_time_ = (double) tmp;
 
     if (config.mapGetFloat("y_min", &tmp))
-      y_min_ = (double)tmp;
+      y_min_ = (double) tmp;
 
     if (config.mapGetFloat("y_max", &tmp))
-      y_max_ = (double)tmp;
+      y_max_ = (double) tmp;
   }
 
   {
@@ -206,7 +205,8 @@ void GraphPanel::load(const rviz::Config &config)
     if (!config.mapGetInt("topic_" + QString::number(i) + "_color", &color_index))
       break;
 
-    std::shared_ptr<TopicData> topic_data = std::make_shared<TopicData>(topic_name.toStdString(), topic_type.toStdString(), nh_);
+    std::shared_ptr<TopicData> topic_data = std::make_shared<TopicData>(topic_name.toStdString(),
+                                                                        topic_type.toStdString(), nh_);
     topic_data->thickness_ = topic_thickness;
     topic_data->color_ = topic_color_class_.getColorFromIndex(color_index);
     displayed_topics_.push_back(topic_data);
@@ -224,7 +224,7 @@ void GraphPanel::load(const rviz::Config &config)
   Q_EMIT enableLegend(legend_enable_);
 }
 
-void GraphPanel::save(rviz::Config config) const
+void LinePanel::save(rviz::Config config) const
 {
   rviz::Panel::save(config);
   config.mapSetValue("window_time_enable", window_time_enable_.load());
@@ -238,14 +238,17 @@ void GraphPanel::save(rviz::Config config) const
 
   for (unsigned i = 0; i < displayed_topics_.size(); i++)
   {
-    config.mapSetValue("topic_" + QString::number(i) + "_name", QString::fromStdString(displayed_topics_.at(i)->topic_name_));
-    config.mapSetValue("topic_" + QString::number(i) + "_type", QString::fromStdString(displayed_topics_.at(i)->topic_type_));
+    config.mapSetValue("topic_" + QString::number(i) + "_name",
+                       QString::fromStdString(displayed_topics_.at(i)->topic_name_));
+    config.mapSetValue("topic_" + QString::number(i) + "_type",
+                       QString::fromStdString(displayed_topics_.at(i)->topic_type_));
     config.mapSetValue("topic_" + QString::number(i) + "_thickness", displayed_topics_.at(i)->thickness_);
-    config.mapSetValue("topic_" + QString::number(i) + "_color", topic_color_class_.getIndexFromColor(displayed_topics_.at(i)->color_));
+    config.mapSetValue("topic_" + QString::number(i) + "_color",
+                       topic_color_class_.getIndexFromColor(displayed_topics_.at(i)->color_));
   }
 }
 
-void GraphPanel::startPauseClicked()
+void LinePanel::startPauseClicked()
 {
   if ((graph_refresh_timer_->isActive()) == false)
   {
@@ -288,7 +291,7 @@ void GraphPanel::startPauseClicked()
   }
 }
 
-void GraphPanel::stopClicked()
+void LinePanel::stopClicked()
 {
   topic_button_->setEnabled(true);
 
@@ -301,7 +304,7 @@ void GraphPanel::stopClicked()
   graph_stopped_ = true;
 }
 
-void GraphPanel::resetClicked()
+void LinePanel::resetClicked()
 {
   if ((graph_refresh_timer_->isActive()) == true)
     startPauseClicked();
@@ -326,9 +329,10 @@ void GraphPanel::resetClicked()
   Q_EMIT configChanged();
 }
 
-void GraphPanel::exportClicked()
+void LinePanel::exportClicked()
 {
-  QString file_name = QFileDialog::getSaveFileName(this, tr("Save file"), export_directory_ + "/graph.png", tr("PNG (*.png);; JPG (*.jpg) ;; PDF (*.pdf)"));
+  QString file_name = QFileDialog::getSaveFileName(this, tr("Save file"), export_directory_ + "/graph.png",
+                                                   tr("PNG (*.png);; JPG (*.jpg) ;; PDF (*.pdf)"));
 
   if (file_name.isEmpty())
     return;
@@ -347,9 +351,22 @@ void GraphPanel::exportClicked()
   Q_EMIT configChanged();
 }
 
-void GraphPanel::topicsSelectionClicked()
+void LinePanel::topicsSelectionClicked()
 {
-  SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_);
+  std::vector<std::string> allowed_topics;
+  allowed_topics.emplace_back("std_msgs/Bool");
+  allowed_topics.emplace_back("std_msgs/Int8");
+  allowed_topics.emplace_back("std_msgs/UInt8");
+  allowed_topics.emplace_back("std_msgs/Int16");
+  allowed_topics.emplace_back("std_msgs/UInt16");
+  allowed_topics.emplace_back("std_msgs/Int32");
+  allowed_topics.emplace_back("std_msgs/UInt32");
+  allowed_topics.emplace_back("std_msgs/Int64");
+  allowed_topics.emplace_back("std_msgs/UInt64");
+  allowed_topics.emplace_back("std_msgs/Float32");
+  allowed_topics.emplace_back("std_msgs/Float64");
+
+  SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_, allowed_topics, false);
 
   if (topic_window->supported_topics_.empty())
   {
@@ -367,7 +384,8 @@ void GraphPanel::topicsSelectionClicked()
     displayed_topics_ = topic_window->displayed_topics_;
 
     for (unsigned i = 0; i < displayed_topics_.size(); i++)
-      displayed_topics_.at(i)->color_ = topic_color_class_.getColorFromIndex(i % ((topic_color_class_.colors_list_).size()));
+      displayed_topics_.at(i)->color_ = topic_color_class_.getColorFromIndex(
+          i % ((topic_color_class_.colors_list_).size()));
 
     graphInit();
     graphSettingsUpdate();
@@ -382,7 +400,7 @@ void GraphPanel::topicsSelectionClicked()
   }
 }
 
-void GraphPanel::graphSettingsClicked()
+void LinePanel::graphSettingsClicked()
 {
   GraphSettings *configure_topics = new GraphSettings(displayed_topics_);
 
@@ -390,10 +408,10 @@ void GraphPanel::graphSettingsClicked()
     graphSettingsUpdate();
 }
 
-void GraphPanel::settingsClicked()
+void LinePanel::settingsClicked()
 {
   Settings *configure_graph = new Settings(yaxis_rescale_auto_, window_time_enable_,
-      legend_enable_,  y_min_, y_max_, w_time_, refresh_freq_);
+                                           legend_enable_, y_min_, y_max_, w_time_, refresh_freq_);
 
   if (!configure_graph->exec())
     return;
@@ -416,12 +434,13 @@ void GraphPanel::settingsClicked()
   }
 }
 
-void GraphPanel::enableLegend(bool legend_enable)
+void LinePanel::enableLegend(bool legend_enable)
 {
   plot_->legend->setVisible(legend_enable);
 }
 
 }
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(graph_rviz_plugin::GraphPanel, rviz::Panel)
+
+PLUGINLIB_EXPORT_CLASS(graph_rviz_plugin::LinePanel, rviz::Panel)
 

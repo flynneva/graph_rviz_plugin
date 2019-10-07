@@ -3,8 +3,8 @@
 namespace graph_rviz_plugin
 {
 
-GraphSettings::GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *):
-  displayed_topics_(displayed_topics)
+GraphSettings::GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *) :
+    displayed_topics_(displayed_topics)
 {
   setWindowTitle("Graph settings");
   resize(600, 240);
@@ -57,7 +57,7 @@ GraphSettings::GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_to
   main_table->resizeRowsToContents();
 
   configure_layout->addWidget(main_table);
-  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok| QDialogButtonBox::Cancel);
+  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
   configure_layout->addWidget(button_box);
 
   connect(button_box, &QDialogButtonBox::accepted, this, &GraphSettings::okClicked);
