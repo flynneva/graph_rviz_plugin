@@ -18,11 +18,13 @@ namespace graph_rviz_plugin
 
 class SelectionTopics : public QDialog
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
   SelectionTopics(std::shared_ptr<ros::NodeHandle> nh,
                   std::deque<std::shared_ptr<TopicData>> already_displayed_topics,
+                  const std::vector<std::string> allowed_types,
+                  const bool single_choice,
                   QDialog *parent = 0);
   ~SelectionTopics();
   std::deque<std::shared_ptr<TopicData>> displayed_topics_;
@@ -43,9 +45,11 @@ protected Q_SLOTS:
 
 private:
   void detectTopics();
-  std::vector<QCheckBox *> topic_buttons_;
+  std::vector<QAbstractButton *> topic_buttons_;
   std::shared_ptr<ros::NodeHandle> nh_;
   std::deque<std::shared_ptr<TopicData>> already_displayed_topics_;
+  const std::vector<std::string> allowed_types_;
+  const bool single_choice_;
 };
 
 }

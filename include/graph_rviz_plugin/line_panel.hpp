@@ -1,5 +1,5 @@
-#ifndef GRAPH_RVIZ_PLUGIN_PANEL_HPP
-#define GRAPH_RVIZ_PLUGIN_PANEL_HPP
+#ifndef GRAPH_RVIZ_PLUGIN_LINE_PANEL_HPP
+#define GRAPH_RVIZ_PLUGIN_LINE_PANEL_HPP
 
 #include <atomic>
 #include <chrono>
@@ -28,13 +28,13 @@
 namespace graph_rviz_plugin
 {
 
-class GraphPanel : public rviz::Panel
+class LinePanel : public rviz::Panel
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
-  GraphPanel(QWidget *parent = 0);
-  virtual ~GraphPanel();
+  LinePanel(QWidget *parent = 0);
+  virtual ~LinePanel();
 
 Q_SIGNALS:
   void enable(const bool);

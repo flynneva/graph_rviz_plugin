@@ -3,13 +3,14 @@
 
 #include <deque>
 #include <exception>
+#include <graph_rviz_plugin/qcustomplot.h>
 #include <mutex>
 #include <QMessageBox>
 #include <QObject>
 #include <QVector>
 #include <ros/ros.h>
 #include <ros/time.h>
-#include <graph_rviz_plugin/qcustomplot.h>
+#include <sensor_msgs/Image.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Duration.h>
 #include <std_msgs/Float32.h>
@@ -30,7 +31,7 @@ namespace graph_rviz_plugin
 
 class TopicData : public QObject
 {
-  Q_OBJECT
+Q_OBJECT
 public:
   TopicData(std::string topic_name,
             std::string topic_type,

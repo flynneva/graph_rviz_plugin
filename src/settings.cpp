@@ -4,20 +4,20 @@ namespace graph_rviz_plugin
 {
 
 Settings::Settings(bool scale_auto, bool window_time_enable, bool
-                               legend_enable, double y_min, double y_max, double w_time , double
-                               refresh_freq, QDialog *):
-  y_min_(y_min),
-  y_max_(y_max),
-  w_time_(w_time),
-  refresh_freq_(refresh_freq),
-  scale_auto_(scale_auto),
-  window_time_enable_(window_time_enable),
-  legend_enable_(legend_enable),
-  y_min_double_spin_box_(new QDoubleSpinBox),
-  y_max_double_spin_box_(new QDoubleSpinBox),
-  w_time_double_spin_box_(new QDoubleSpinBox),
-  refresh_frequency_spin_box_(new QComboBox),
-  legend_enable_button_(new QCheckBox("Enable legend"))
+legend_enable, double y_min, double y_max, double w_time, double
+                   refresh_freq, QDialog *) :
+    y_min_(y_min),
+    y_max_(y_max),
+    w_time_(w_time),
+    refresh_freq_(refresh_freq),
+    scale_auto_(scale_auto),
+    window_time_enable_(window_time_enable),
+    legend_enable_(legend_enable),
+    y_min_double_spin_box_(new QDoubleSpinBox),
+    y_max_double_spin_box_(new QDoubleSpinBox),
+    w_time_double_spin_box_(new QDoubleSpinBox),
+    refresh_frequency_spin_box_(new QComboBox),
+    legend_enable_button_(new QCheckBox("Enable legend"))
 {
   setWindowTitle("Settings");
   QVBoxLayout *main_layout = new QVBoxLayout;
@@ -130,7 +130,7 @@ void Settings::yAxisAutoscale(bool checked)
   {
     y_min_double_spin_box_->setEnabled(true);
     y_max_double_spin_box_->setEnabled(true);
-    scale_auto_ = false ;
+    scale_auto_ = false;
   }
   else
   {
@@ -139,7 +139,6 @@ void Settings::yAxisAutoscale(bool checked)
     scale_auto_ = true;
   }
 }
-
 
 void Settings::xAxisWindowTime(bool checked)
 {
@@ -176,7 +175,6 @@ void Settings::yMaxChanged(double y_max)
     y_min_double_spin_box_->setValue(y_min_);
   }
 }
-
 
 void Settings::okClicked()
 {

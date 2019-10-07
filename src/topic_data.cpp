@@ -7,10 +7,10 @@ TopicData::TopicData(std::string topic_name,
                      std::string topic_type,
                      std::shared_ptr<ros::NodeHandle> nh,
                      QObject *parent) :
-  QObject(parent),
-  nh_(nh),
-  topic_name_(topic_name),
-  topic_type_(topic_type)
+    QObject(parent),
+    nh_(nh),
+    topic_name_(topic_name),
+    topic_type_(topic_type)
 {
 }
 
@@ -98,13 +98,13 @@ void TopicData::durationCallback(const std_msgs::DurationConstPtr &msg)
   std::lock_guard<std::mutex> guard(data_mutex_);
   const double data = (msg->data).toSec();
   pushData(data, ros::Time::now());
-  data_update_ = true ;
+  data_update_ = true;
 }
 
 void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -112,7 +112,7 @@ void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
 void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -120,7 +120,7 @@ void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -128,7 +128,7 @@ void TopicData::int8Callback(const std_msgs::Int8ConstPtr &msg)
 void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double data = (double)(msg->data);
+  double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -136,7 +136,7 @@ void TopicData::int16Callback(const std_msgs::Int16ConstPtr &msg)
 void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double data = (double)(msg->data);
+  double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -144,7 +144,7 @@ void TopicData::int32Callback(const std_msgs::Int32ConstPtr &msg)
 void TopicData::int64Callback(const std_msgs::Int64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  double data = (double)(msg->data);
+  double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -160,7 +160,7 @@ void TopicData::timeCallback(const std_msgs::TimeConstPtr &msg)
 void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -168,7 +168,7 @@ void TopicData::uint8Callback(const std_msgs::UInt8ConstPtr &msg)
 void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -176,7 +176,7 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -184,7 +184,7 @@ void TopicData::uint32Callback(const std_msgs::UInt32ConstPtr &msg)
 void TopicData::uint64Callback(const std_msgs::UInt64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  const double data = (double)(msg->data);
+  const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
   data_update_ = true;
 }
@@ -202,9 +202,9 @@ QVector<double> TopicData::getTopicTime()
 }
 
 void TopicData::displayMessageBoxHandler(const QString title,
-    const QString message,
-    const QString info_msg,
-    const QMessageBox::Icon icon)
+                                         const QString message,
+                                         const QString info_msg,
+                                         const QMessageBox::Icon icon)
 {
   QMessageBox msg_box;
   msg_box.setWindowTitle(title);

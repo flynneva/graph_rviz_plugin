@@ -7,9 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   class_loader
+  cv_bridge
   roscpp
   rqt_gui
   rviz
+  sensor_msgs
 )
 
 ## Find Qt5
@@ -19,7 +21,8 @@ find_package(Qt5PrintSupport REQUIRED)
 
 set(
   PROJECT_QT_PANELS_TARGETS
-  ${PROJECT_NAME}
+  ${PROJECT_NAME}_line
+  ${PROJECT_NAME}_histogram
 )
 
 set(
@@ -51,9 +54,11 @@ catkin_package(
   LIBRARIES
   ${PROJECT_TARGETS}
   CATKIN_DEPENDS
+  cv_bridge
   roscpp
   rqt_gui
   rviz
+  sensor_msgs
 )
 
 ###########
@@ -156,12 +161,12 @@ add_dependencies(
 
 ## Qt panel
 add_library(
-  ${PROJECT_NAME}
-  include/${PROJECT_NAME}/panel.hpp
-  src/panel.cpp
+  ${PROJECT_NAME}_line
+  include/${PROJECT_NAME}/line_panel.hpp
+  src/line_panel.cpp
 )
 target_link_libraries(
-  ${PROJECT_NAME}
+  ${PROJECT_NAME}_line
   ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics
@@ -172,7 +177,35 @@ target_link_libraries(
   ${catkin_LIBRARIES}
 )
 add_dependencies(
-  ${PROJECT_NAME}
+  ${PROJECT_NAME}_line
+  ${PROJECT_NAME}_graph_settings
+  ${PROJECT_NAME}_qcustomplot
+  ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_settings
+  ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
+  ${catkin_EXPORTED_TARGETS}
+)
+
+## Qt panel
+add_library(
+  ${PROJECT_NAME}_histogram
+  include/${PROJECT_NAME}/histogram_panel.hpp
+  src/histogram_panel.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}_histogram
+  ${PROJECT_NAME}_graph_settings
+  ${PROJECT_NAME}_qcustomplot
+  ${PROJECT_NAME}_selection_topics
+  ${PROJECT_NAME}_settings
+  ${PROJECT_NAME}_topics_data
+  ${PROJECT_NAME}_topic_color
+  Qt5::Widgets
+  ${catkin_LIBRARIES}
+)
+add_dependencies(
+  ${PROJECT_NAME}_histogram
   ${PROJECT_NAME}_graph_settings
   ${PROJECT_NAME}_qcustomplot
   ${PROJECT_NAME}_selection_topics

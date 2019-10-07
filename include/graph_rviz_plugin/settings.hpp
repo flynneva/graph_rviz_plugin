@@ -16,10 +16,11 @@ namespace graph_rviz_plugin
 
 class Settings : public QDialog
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
-  Settings(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max , double w_time , double refresh_freq, QDialog *parent = 0);
+  Settings(bool scale_auto, bool window_time_enable, bool legend_enable, double y_min, double y_max, double w_time,
+           double refresh_freq, QDialog *parent = 0);
   ~Settings();
   double y_min_;
   double y_max_;

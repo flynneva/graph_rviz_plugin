@@ -3,9 +3,9 @@
 [![build status](https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin/badges/melodic/build.svg)](https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin/commits/melodic)
 
 # Overview
-This package contains a Qt RViz panel that allows users to draw graphs of topics values dynamically.
+This package contains two Qt RViz panels that allows users to draw graphs of topics values dynamically (line graph) and to visualise image histograms.
 
-Supported built-in types are:
+Line graph supported built-in types are:
 - bool
 - duration
 - float32
@@ -22,11 +22,15 @@ Supported built-in types are:
 
 :warning: It is not possible to draw graphs from values inside custom messages, see https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin/issues/11
 
+Histogram supported types are:
+- sensor_msgs/Image
+
 # Screenshot
-![Graph panel](documentation/graph_panel.png)
+![Line graph panel](documentation/line_graph_panel.png)
+
+![Histogram panel](documentation/histogram_panel.png)
 
 :information_source: The panel configuration is saved/loaded in the RViz configuration file, this includes which topics are recorded, the graph settings and settings.
-
 
 # Dependencies
 
@@ -53,7 +57,6 @@ rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 catkin_make
 ```
 
-
 # User manual
 
 ## Start / pause
@@ -70,7 +73,7 @@ Allows to choose which topics to record. Cannot be modified when started or paus
 ## Graph settings
 Allows to change the appearance of each graph.
 
-![Graph settings](documentation/graph_settings.png)
+![Line graph settings](documentation/line_graph_settings.png)
 
 - Display: Whether to display the graph or not (this does not affect the data update in the background).
 - Color: The color of the graph line.
@@ -79,7 +82,7 @@ Allows to change the appearance of each graph.
 ## Settings
 Allow to change the panel configuration
 
-![Settings](documentation/settings.png)
+![Line graph settings](documentation/line_graph_settings.png)
 
 - Refresh frequency: At what rate the graph updates, you can lower the graph update if performance becomes a problem.
 - Enabled legend: Show or hide the legend.

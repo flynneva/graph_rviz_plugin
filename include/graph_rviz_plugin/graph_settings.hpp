@@ -18,7 +18,7 @@ namespace graph_rviz_plugin
 
 class GraphSettings : public QDialog
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
   GraphSettings(std::deque<std::shared_ptr<TopicData>> displayed_topics, QDialog *parent = 0);
