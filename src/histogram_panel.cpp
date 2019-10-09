@@ -316,13 +316,12 @@ void HistogramPanel::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 
   if (cv_image->image.depth() == CV_8U)
   {
-    float range[] = {0, 256};
+    float range[] = {0, 255};
     const float *hist_range = {range};
     cv::calcHist(&cv_image->image, 1, nullptr, cv::Mat(), output, 1, &bins_number, &hist_range);
 
     for (int i(0); i < ticks_.size(); ++i)
       data_.push_back(output.at<float>(i));
-
   }
   else if (cv_image->image.depth() == CV_16U)
   {
