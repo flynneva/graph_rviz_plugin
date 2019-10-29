@@ -288,14 +288,23 @@ void HistogramPanel::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(data_ticks_mutex_);
 
-  cv_bridge::CvImagePtr cv_image(cv_bridge::toCvCopy(msg, msg->encoding));
+  cv_bridge::CvImagePtr cv_image;
+  try
+  {
+    cv_image = cv_bridge::toCvCopy(msg, msg->encoding);
+  }
+  catch (const cv::Exception &e)
+  {
+    std::string error("Error converting the image: ");
+    error += e.what();
+    ROS_ERROR_STREAM_NAMED(getName().toStdString(), error);
+    return;
+  }
 
   if (cv_image->image.channels() != 1)
   {
-    Q_EMIT displayMessageBox("Image format",
-                             "Image format is not supported",
-                             "Only images with one channel are supported",
-                             QMessageBox::Icon::Warning);
+    ROS_ERROR_STREAM_NAMED(getName().toStdString(),
+                           "Image format is not supported: Only images with one channel are supported");
     return;
   }
 
@@ -334,10 +343,8 @@ void HistogramPanel::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   }
   else
   {
-    Q_EMIT displayMessageBox("Image format",
-                             "Image format is not supported",
-                             "Only CV_8U and CV_16U images are supported",
-                             QMessageBox::Icon::Warning);
+    ROS_ERROR_STREAM_NAMED(getName().toStdString(),
+                           "Image format is not supported: Only CV_8U and CV_16U images are supported");
     return;
   }
 }
