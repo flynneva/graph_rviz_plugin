@@ -16,8 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Find Qt5
 set(CMAKE_AUTOMOC ON)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5PrintSupport REQUIRED)
+find_package(Qt5Widgets 5.7 REQUIRED)
+find_package(Qt5PrintSupport 5.7 REQUIRED)
 
 set(
   PROJECT_QT_PANELS_TARGETS
@@ -40,9 +40,9 @@ set(
 ## Declare ROS messages, services and actions ##
 ################################################
 
-################################################
+#####################################################
 ## Declare ROS dynamic regraph_settings parameters ##
-################################################
+#####################################################
 
 ###################################
 ## catkin specific configuration ##
