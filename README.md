@@ -23,8 +23,12 @@ Line graph supported built-in types are:
 Histogram supported types are:
 - sensor_msgs/Image
 
-# Screenshot
+# Screenshots
+- Graph line
+
 ![Line graph panel](documentation/line_graph_panel.png)
+
+- Histogram
 
 ![Histogram panel](documentation/histogram_panel.png)
 
@@ -71,13 +75,11 @@ Allows to choose which topics to record. Cannot be modified when started or paus
 ## Graph settings
 Allows to change the appearance of each graph.
 
-![Line graph settings](documentation/line_graph_settings.png)
-
 - Display: Whether to display the graph or not (this does not affect the data update in the background).
 - Color: The color of the graph line.
 - Thickness: The thickness of the graph line.
 
-## Settings
+## Graph line settings
 Allow to change the panel configuration
 
 ![Line graph settings](documentation/line_graph_settings.png)
@@ -88,6 +90,15 @@ Allow to change the panel configuration
   - Y auto: The Y axis will be automatically scaled depending on the topics values (hidden topics are included in the scaling).
   - Y max / Y min: Allows to specify a fixed Y range.
 - X axis window time: If enabled, the graph will only show the latest `x` data depending on the time value.
+
+## Histogram settings
+Allows to change the panel configuration
+
+![Line graph settings](documentation/histogram_settings.png)
+- Topic: Select the image topic.
+- Start / Stop: Start or stop the data acquisition.
+- Refresh frequency: At what rate the graph updates, you can lower the graph update if performance becomes a problem.
+- Bins selection: Define how many bins will be used to compute the histogram.
 
 ## Export
 Allows to export the graph to a PNG, PDF or JPEG file.
