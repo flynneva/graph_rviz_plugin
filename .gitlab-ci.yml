@@ -15,7 +15,8 @@ catkin lint:
   image: ros:melodic-ros-core
   before_script:
     - apt update >/dev/null 2>&1
-    - apt install -y python-catkin-lint >/dev/null 2>&1
+    - apt install -y python-catkin-lint python-rosdep >/dev/null 2>&1
+    - rosdep init >/dev/null && rosdep update >/dev/null
   script:
     - catkin_lint -W3 .
 
