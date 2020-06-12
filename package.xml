@@ -19,7 +19,6 @@
   <depend>sensor_msgs</depend>
 
   <export>
-    <rqt_gui plugin="${prefix}/plugin.xml"/>
     <rviz plugin="${prefix}/plugin.xml"/>
   </export>
 </package>
