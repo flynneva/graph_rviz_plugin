@@ -115,7 +115,12 @@ void LinePanel::graphUpdate()
       if (window_time_enable_ == false)
         plot_->xAxis->rescale(true);
       else
-        plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignRight);
+      {
+        if (!topic_time.empty())
+          plot_->xAxis->setRange(topic_time.last(), w_time_, Qt::AlignRight);
+        else
+          plot_->xAxis->setRange(5, w_time_, Qt::AlignRight);
+      }
 
       plot_->graph(i)->setData(topic_time, topic_data, true);
       displayed_topics_.at(i)->data_update_ = false;
