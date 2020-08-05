@@ -91,7 +91,8 @@ legend_enable, double y_min, double y_max, double w_time, double
   QFormLayout *x_axis_layout = new QFormLayout;
   QCheckBox *x_axis_window_time_button = new QCheckBox("Window time");
   x_axis_layout->addWidget(x_axis_window_time_button);
-  w_time_double_spin_box_->setRange(1, 600);
+  w_time_double_spin_box_->setRange(1, 36000);
+  w_time_double_spin_box_->setSingleStep(10);
 
   if (window_time_enable_ == false)
   {
