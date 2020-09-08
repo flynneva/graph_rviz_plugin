@@ -67,6 +67,14 @@ LinePanel::LinePanel(QWidget *parent) :
   stop_button_->setEnabled(false);
   graph_settings_button_->setEnabled(false);
   export_button_->setEnabled(false);
+
+  start_pause_button_->setMinimumWidth(45);
+  stop_button_->setMinimumWidth(45);
+  topic_button_->setMinimumWidth(50);
+  graph_settings_button_->setMinimumWidth(95);
+  settings_button->setMinimumWidth(70);
+  export_button_->setMinimumWidth(50);
+  reset_button->setMinimumWidth(45);
 }
 
 LinePanel::~LinePanel()
