@@ -248,6 +248,14 @@ install(
   ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
+install(
+  PROGRAMS
+  scripts/subtopic_repub.py
+  DESTINATION
+  ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+
 #############
 ## Testing ##
 #############
