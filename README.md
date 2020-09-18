@@ -4,19 +4,19 @@
 This package contains two Qt RViz panels that allows users to draw graphs of topics values dynamically (line graph) and to visualise image histograms.
 
 Line graph supported built-in types are:
-- bool
-- duration
-- float32
-- float64
-- int8
-- int16
-- int32
-- int64
-- time
-- uint8
-- uint16
-- uint32
-- uint64
+- `bool`
+- `duration`
+- `float32`
+- `float64`
+- `int8`
+- `int16`
+- `int32`
+- `int64`
+- `time`
+- `uint8`
+- `uint16`
+- `uint32`
+- `uint64`
 
 :warning: It is not possible to draw graphs from values inside custom messages, see https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin/issues/11
 
@@ -107,10 +107,7 @@ Allows to export the graph to a PNG, PDF or JPEG file.
 ## Reset
 Clears the graphs, underlying data and topics to be recorded.
 
-
-# Helpful script
-
-## subtopic_repub.py
+# `subtopic_repub.py`
 
 Republish a subtopic into another topic, useful to republish a field you want to plot, e.g.:
 
