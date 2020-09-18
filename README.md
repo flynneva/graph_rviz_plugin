@@ -60,6 +60,7 @@ catkin_make
 ```
 
 # User manual
+Add the panel in Rviz by going to `Panels > Add New Panel > grah_rviz_plugin` and add `Line graph` or `Histogram`.
 
 ## Start / pause
 Allows to start recording or pause the recording. When paused, it is possible to inspect the graph and the data are still updated in the background (pausing does not make you loose data).
@@ -105,3 +106,30 @@ Allows to export the graph to a PNG, PDF or JPEG file.
 
 ## Reset
 Clears the graphs, underlying data and topics to be recorded.
+
+
+# Helpful script
+
+## subtopic_repub.py
+
+Republish a subtopic into another topic, useful to republish a field you want to plot, e.g.:
+
+Usage:
+```bash
+rosrun graph_rviz_plugin subtopic_repub.py /topic/subtopic/field /my_republished_field [queue_size (default 10)]
+```
+
+Examples:
+```bash
+rosrun graph_rviz_plugin subtopic_repub.py /imu/angular_velocity/x /angular_velocity_x
+rosrun graph_rviz_plugin subtopic_repub.py /hullbot/sensors/bno055/imu/angular_velocity_covariance[0] /angular_velocity_covariance_0
+```
+
+Example output:
+```bash
+rosrun graph_rviz_plugin subtopic_repub.py /imu/angular_velocity/x /angular_velocity_x
+[INFO] [1597403303.283071]: Republishing subtopic: /imu/angular_velocity/x into topic: /angular_velocity_x (with queue_size: 10)
+[INFO] [1597403303.362539]: Input topic is of type: sensor_msgs/Imu
+[INFO] [1597403303.363576]: Got submsg of type: std_msgs/Float64
+```
+
