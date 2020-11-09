@@ -22,6 +22,7 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Time.h>
 #include <std_msgs/UInt16.h>
+#include <std_msgs/UInt16MultiArray.h>
 #include <std_msgs/UInt32.h>
 #include <std_msgs/UInt64.h>
 #include <std_msgs/UInt8.h>
@@ -84,9 +85,11 @@ private:
   void timeCallback(const std_msgs::TimeConstPtr &msg);
   void uint8Callback(const std_msgs::UInt8ConstPtr &msg);
   void uint16Callback(const std_msgs::UInt16ConstPtr &msg);
+  void uint16MultiArrayCallback(const std_msgs::UInt16MultiArrayConstPtr &msg);
   void uint32Callback(const std_msgs::UInt32ConstPtr &msg);
   void uint64Callback(const std_msgs::UInt64ConstPtr &msg);
   void pushData(const double Data, const ros::Time now);
+  void pushDataMA(const std::vector<uint16_t> Data, const ros::Time now);
 };
 
 }

@@ -372,6 +372,7 @@ void LinePanel::topicsSelectionClicked()
   allowed_topics.emplace_back("std_msgs/UInt8");
   allowed_topics.emplace_back("std_msgs/Int16");
   allowed_topics.emplace_back("std_msgs/UInt16");
+  allowed_topics.emplace_back("std_msgs/UInt16MultiArray");
   allowed_topics.emplace_back("std_msgs/Int32");
   allowed_topics.emplace_back("std_msgs/UInt32");
   allowed_topics.emplace_back("std_msgs/Int64");

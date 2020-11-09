@@ -45,6 +45,8 @@ void TopicData::startRefreshData()
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint8Callback, this);
   else if (topic_type_ == "std_msgs/UInt16")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint16Callback, this);
+  else if (topic_type_ == "std_msgs/UInt16MultiArray")
+    sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint16MultiArrayCallback, this);
   else if (topic_type_ == "std_msgs/UInt32")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::uint32Callback, this);
   else if (topic_type_ == "std_msgs/UInt64")
@@ -70,7 +72,7 @@ void TopicData::stopRefreshData()
 void TopicData::pushData(const double data, const ros::Time now)
 {
   double time = (now.toSec() - begin_.toSec());
-
+  
   try
   {
     topic_time_.push_back(time);
@@ -82,6 +84,27 @@ void TopicData::pushData(const double data, const ros::Time now)
     Q_EMIT displayMessageBox("Fatal Error", "Memory is full, acquisition is stopped.", "",
                              QMessageBox::Icon::Critical);
     sub_.shutdown();
+  }
+}
+
+void TopicData::pushDataMA(const std::vector<uint16_t> data, const ros::Time now)
+{
+  try
+  {
+    // clear old topic_data
+    clearData();
+    std::vector<double> fake_time(data.size());
+    std::iota (std::begin(fake_time), std::end(fake_time), 0);
+    std::vector<double> vecDouble(data.begin(), data.end());
+    // fill in new data
+    QVector<double> data_double = QVector<double>::fromStdVector(vecDouble);
+    QVector<double> time_double = QVector<double>::fromStdVector(fake_time);
+    topic_data_ = data_double;
+    topic_time_ = time_double;
+  }
+  catch (const std::exception &e)
+  {
+    ROS_WARN("ma exception");
   }
 }
 
@@ -170,6 +193,13 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
   std::lock_guard<std::mutex> guard(data_mutex_);
   const double data = (double) (msg->data);
   pushData(data, ros::Time::now());
+  data_update_ = true;
+}
+
+void TopicData::uint16MultiArrayCallback(const std_msgs::UInt16MultiArrayConstPtr &msg)
+{
+  std::lock_guard<std::mutex> guard(data_mutex_);
+  pushDataMA(msg->data, ros::Time::now());
   data_update_ = true;
 }
 
