@@ -7,16 +7,26 @@ Line graph supported built-in types are:
 - `bool`
 - `duration`
 - `float32`
+- `float32MultiArray`
 - `float64`
+- `float64MultiArray`
 - `int8`
+- `int8MultiArray`
 - `int16`
+- `int16MultiArray`
 - `int32`
+- `int32MultiArray`
 - `int64`
+- `int64MultiArray`
 - `time`
 - `uint8`
+- `uint8MultiArray`
 - `uint16`
+- `uint16MultiArray`
 - `uint32`
+- `uint32MultiArray`
 - `uint64`
+- `uint64MultiArray`
 
 :warning: It is not possible to draw graphs from values inside custom messages, see https://gitlab.com/InstitutMaupertuis/graph_rviz_plugin/issues/11
 
