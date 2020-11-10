@@ -369,17 +369,25 @@ void LinePanel::topicsSelectionClicked()
   std::vector<std::string> allowed_topics;
   allowed_topics.emplace_back("std_msgs/Bool");
   allowed_topics.emplace_back("std_msgs/Int8");
+  allowed_topics.emplace_back("std_msgs/Int8MultiArray");
   allowed_topics.emplace_back("std_msgs/UInt8");
+  allowed_topics.emplace_back("std_msgs/UInt8MultiArray");
   allowed_topics.emplace_back("std_msgs/Int16");
+  allowed_topics.emplace_back("std_msgs/Int16MultiArray");
   allowed_topics.emplace_back("std_msgs/UInt16");
   allowed_topics.emplace_back("std_msgs/UInt16MultiArray");
   allowed_topics.emplace_back("std_msgs/Int32");
+  allowed_topics.emplace_back("std_msgs/Int32MultiArray");
   allowed_topics.emplace_back("std_msgs/UInt32");
+  allowed_topics.emplace_back("std_msgs/UInt32MultiArray");
   allowed_topics.emplace_back("std_msgs/Int64");
+  allowed_topics.emplace_back("std_msgs/Int64MultiArray");
   allowed_topics.emplace_back("std_msgs/UInt64");
+  allowed_topics.emplace_back("std_msgs/UInt64MultiArray");
   allowed_topics.emplace_back("std_msgs/Float32");
   allowed_topics.emplace_back("std_msgs/Float32MultiArray");
   allowed_topics.emplace_back("std_msgs/Float64");
+  allowed_topics.emplace_back("std_msgs/Float64MultiArray");
 
   SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_, allowed_topics, false);
 

@@ -16,17 +16,25 @@
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float32MultiArray.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/Int16MultiArray.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Int32MultiArray.h>
 #include <std_msgs/Int64.h>
+#include <std_msgs/Int64MultiArray.h>
 #include <std_msgs/Int8.h>
+#include <std_msgs/Int8MultiArray.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Time.h>
 #include <std_msgs/UInt16.h>
 #include <std_msgs/UInt16MultiArray.h>
 #include <std_msgs/UInt32.h>
+#include <std_msgs/UInt32MultiArray.h>
 #include <std_msgs/UInt64.h>
+#include <std_msgs/UInt64MultiArray.h>
 #include <std_msgs/UInt8.h>
+#include <std_msgs/UInt8MultiArray.h>
 
 namespace graph_rviz_plugin
 {
@@ -80,16 +88,24 @@ private:
   void float32Callback(const std_msgs::Float32ConstPtr &msg);
   void float32MultiArrayCallback(const std_msgs::Float32MultiArrayConstPtr &msg);
   void float64Callback(const std_msgs::Float64ConstPtr &msg);
+  void float64MultiArrayCallback(const std_msgs::Float64MultiArrayConstPtr &msg);
   void int8Callback(const std_msgs::Int8ConstPtr &msg);
+  void int8MultiArrayCallback(const std_msgs::Int8MultiArrayConstPtr &msg);
   void int16Callback(const std_msgs::Int16ConstPtr &msg);
+  void int16MultiArrayCallback(const std_msgs::Int16MultiArrayConstPtr &msg);
   void int32Callback(const std_msgs::Int32ConstPtr &msg);
+  void int32MultiArrayCallback(const std_msgs::Int32MultiArrayConstPtr &msg);
   void int64Callback(const std_msgs::Int64ConstPtr &msg);
+  void int64MultiArrayCallback(const std_msgs::Int64MultiArrayConstPtr &msg);
   void timeCallback(const std_msgs::TimeConstPtr &msg);
   void uint8Callback(const std_msgs::UInt8ConstPtr &msg);
+  void uint8MultiArrayCallback(const std_msgs::UInt8MultiArrayConstPtr &msg);
   void uint16Callback(const std_msgs::UInt16ConstPtr &msg);
   void uint16MultiArrayCallback(const std_msgs::UInt16MultiArrayConstPtr &msg);
   void uint32Callback(const std_msgs::UInt32ConstPtr &msg);
+  void uint32MultiArrayCallback(const std_msgs::UInt32MultiArrayConstPtr &msg);
   void uint64Callback(const std_msgs::UInt64ConstPtr &msg);
+  void uint64MultiArrayCallback(const std_msgs::UInt64MultiArrayConstPtr &msg);
   void pushData(const double Data, const ros::Time now);
   void pushDataMA(const std::vector<double> Data);
 };
