@@ -14,6 +14,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Duration.h>
 #include <std_msgs/Float32.h>
+#include <std_msgs/Float32MultiArray.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Int32.h>
@@ -77,6 +78,7 @@ private:
   void boolCallback(const std_msgs::BoolConstPtr &msg);
   void durationCallback(const std_msgs::DurationConstPtr &msg);
   void float32Callback(const std_msgs::Float32ConstPtr &msg);
+  void float32MultiArrayCallback(const std_msgs::Float32MultiArrayConstPtr &msg);
   void float64Callback(const std_msgs::Float64ConstPtr &msg);
   void int8Callback(const std_msgs::Int8ConstPtr &msg);
   void int16Callback(const std_msgs::Int16ConstPtr &msg);
@@ -89,7 +91,7 @@ private:
   void uint32Callback(const std_msgs::UInt32ConstPtr &msg);
   void uint64Callback(const std_msgs::UInt64ConstPtr &msg);
   void pushData(const double Data, const ros::Time now);
-  void pushDataMA(const std::vector<uint16_t> Data, const ros::Time now);
+  void pushDataMA(const std::vector<double> Data);
 };
 
 }

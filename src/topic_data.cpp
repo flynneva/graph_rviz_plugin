@@ -31,6 +31,8 @@ void TopicData::startRefreshData()
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::durationCallback, this);
   else if (topic_type_ == "std_msgs/Float32")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::float32Callback, this);
+  else if (topic_type_ == "std_msgs/Float32MultiArray")
+    sub_ = nh_->subscribe(topic_name_, 1, &TopicData::float32MultiArrayCallback, this);
   else if (topic_type_ == "std_msgs/Float64")
     sub_ = nh_->subscribe(topic_name_, 1, &TopicData::float64Callback, this);
   else if (topic_type_ == "std_msgs/Int8")
@@ -87,7 +89,7 @@ void TopicData::pushData(const double data, const ros::Time now)
   }
 }
 
-void TopicData::pushDataMA(const std::vector<uint16_t> data, const ros::Time now)
+void TopicData::pushDataMA(const std::vector<double> data)
 {
   try
   {
@@ -132,6 +134,13 @@ void TopicData::float32Callback(const std_msgs::Float32ConstPtr &msg)
   data_update_ = true;
 }
 
+void TopicData::float32MultiArrayCallback(const std_msgs::Float32MultiArrayConstPtr &msg)
+{
+  std::lock_guard<std::mutex> guard(data_mutex_);
+  std::vector<double> vecDouble(msg->data.begin(), msg->data.end());
+  pushDataMA(vecDouble);
+  data_update_ = true;
+}
 void TopicData::float64Callback(const std_msgs::Float64ConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
@@ -199,7 +208,8 @@ void TopicData::uint16Callback(const std_msgs::UInt16ConstPtr &msg)
 void TopicData::uint16MultiArrayCallback(const std_msgs::UInt16MultiArrayConstPtr &msg)
 {
   std::lock_guard<std::mutex> guard(data_mutex_);
-  pushDataMA(msg->data, ros::Time::now());
+  std::vector<double> vecDouble(msg->data.begin(), msg->data.end());
+  pushDataMA(vecDouble);
   data_update_ = true;
 }
 

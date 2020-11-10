@@ -378,6 +378,7 @@ void LinePanel::topicsSelectionClicked()
   allowed_topics.emplace_back("std_msgs/Int64");
   allowed_topics.emplace_back("std_msgs/UInt64");
   allowed_topics.emplace_back("std_msgs/Float32");
+  allowed_topics.emplace_back("std_msgs/Float32MultiArray");
   allowed_topics.emplace_back("std_msgs/Float64");
 
   SelectionTopics *topic_window = new SelectionTopics(nh_, displayed_topics_, allowed_topics, false);
