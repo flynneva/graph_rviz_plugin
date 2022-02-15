@@ -3,7 +3,6 @@ name: ROS 1 CI
 on:
   pull_request:
     branches:
-      - 'devel'
       - 'main'
 jobs:
   test_environment-linux:
@@ -12,20 +11,10 @@ jobs:
       fail-fast: false
       matrix:
         ros_distribution:
-          - kinetic
-          - melodic
           - noetic
         include:
-            # Kinetic Kame (May 2016 - May 2021)
-          - docker_image: ubuntu:xenial
-            ros_distribution: kinetic
-            ros_version: 1
-            # Melodic Morenia (May 2018 - May 2023)
-          - docker_image: ubuntu:bionic
-            ros_distribution: melodic
-            ros_version: 1
             # Noetic Ninjemys (May 2020 - May 2025)
-          - docker_image: ubuntu:focal
+          - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-noetic-base-latest
             ros_distribution: noetic
             ros_version: 1
     container:
@@ -37,12 +26,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ros_ws/src
-      - name: setup ROS environment
-        uses: flynneva/setup-ros@optional_connext
-        with:
-          required-ros-distributions: ${{ matrix.ros_distribution }}
       - name: build and test
-        uses: ros-tooling/action-ros-ci@0.0.19
+        uses: ros-tooling/action-ros-ci@master
         with:
          package-name: graph_rviz_plugin
          target-ros1-distro: ${{ matrix.ros_distribution }}
