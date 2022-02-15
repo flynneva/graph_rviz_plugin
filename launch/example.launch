@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node name="example_multi_array" pkg="graph_rviz_plugin" type="example_multi_array.py"
+    output="screen">
+  </node>
+
+  <node name="graph_rviz" pkg="rviz" type="rviz"
+    args="-d $(find graph_rviz_plugin)/config/example.rviz" />
+
+</launch>
