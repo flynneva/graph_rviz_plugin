@@ -513,7 +513,7 @@ void HistogramPanel::displayMessageBoxHandler(const QString title,
 }
 
 }
-#include <pluginlib/class_list_macros.h>
+#include <pluginlib/class_list_macros.hpp>
 
 PLUGINLIB_EXPORT_CLASS(graph_rviz_plugin::HistogramPanel, rviz::Panel)
 

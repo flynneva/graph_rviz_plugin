@@ -463,7 +463,7 @@ void LinePanel::enableLegend(bool legend_enable)
 }
 
 }
-#include <pluginlib/class_list_macros.h>
+#include <pluginlib/class_list_macros.hpp>
 
 PLUGINLIB_EXPORT_CLASS(graph_rviz_plugin::LinePanel, rviz::Panel)
 
